@@ -2,19 +2,24 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Photoshop Simples</title>
+  <title>Mini Photoshop</title>
+  <link rel="stylesheet" href="src/css/style.css" />
 </head>
 <body>
-  <div id="container" style="display: flex; height: 100vh;">
-    <canvas id="canvas" width="800" height="600" style="border:1px solid #000;"></canvas>
-    <div id="menu" style="width: 250px; padding: 10px;">
-      <h2>Menu</h2>
-      <label for="fileInput">Carregar Imagem:</label><br />
-      <input type="file" id="fileInput" /><br /><br />
+  <header>
+    <label for="input-image" class="btn-upload">
+      Carregar Imagem
+    </label>
+    <input type="file" id="input-image" accept="image/*" style="display:none" />
+    <button id="btn-save" class="btn-save">Salvar Imagem</button>
+    <button id="btn-inv" class="btn-inv">Inverter Cores</button>
+  </header>
 
-      <button id="invertColorsBtn">Inverter Cores</button><br /><br />
-    </div>
-  </div>
+  <main>
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </main>
+
+  <script type="module" src="src/main.js"></script>
 </body>
 </html>
+
