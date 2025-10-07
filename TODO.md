@@ -1,8 +1,8 @@
 # ToDo List - Trabalho 1: Processamento de Imagens
 
 ## 1. Operações de transformação de intensidade
-- [ ] Implementar Negativo da imagem
-- [ ] Implementar Correção de gama
+- [x] Implementar Negativo da imagem
+- [x] Implementar Correção de gama
 - [ ] Implementar transformação linear definida por partes
 
 ## 2. Esteganografia

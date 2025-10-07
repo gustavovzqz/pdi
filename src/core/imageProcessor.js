@@ -1,14 +1,33 @@
-export function invertColors(canvas) {
-  const ctx = canvas.getContext('2d');
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const pixels = imageData.data;
+import { getNormalizedPixels, updateCanvas } from './utils.js';
 
-  for (let i = 0; i < pixels.length; i += 4) {
-    pixels[i] = 255 - pixels[i];       // R
-    pixels[i + 1] = 255 - pixels[i + 1]; // G
-    pixels[i + 2] = 255 - pixels[i + 2]; // B
-    // pixels[i + 3] alfa fica igual
+const RGBA_SHIFT = 4;
+
+// Invert
+export function invertColors(canvas) {
+  const normalized = getNormalizedPixels(canvas);
+
+  for (let i = 0; i < normalized.length; i += RGBA_SHIFT) {
+    normalized[i] = 1 - normalized[i];       // R
+    normalized[i + 1] = 1 - normalized[i + 1]; // G
+    normalized[i + 2] = 1 - normalized[i + 2]; // B
+    // alfa mantido (normalized[i + 3]) // A
   }
 
-  ctx.putImageData(imageData, 0, 0);
+  updateCanvas(canvas, normalized);
 }
+
+// Gamma
+export function gammaCorrection(canvas, gammaFactor) {
+
+  const normalized = getNormalizedPixels(canvas);
+
+  for (let i = 0; i < normalized.length; i += RGBA_SHIFT) {
+    normalized[i] = Math.pow(normalized[i], gammaFactor);       // R
+    normalized[i + 1] = Math.pow(normalized[i + 1], gammaFactor); // G
+    normalized[i + 2] = Math.pow(normalized[i + 2], gammaFactor); // B
+    // alfa mantido (normalized[i + 3]) // A
+  }
+
+  updateCanvas(canvas, normalized);
+}
+

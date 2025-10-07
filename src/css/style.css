@@ -70,3 +70,9 @@ canvas {
   box-shadow: 0 0 8px rgba(0,0,0,0.3);
 }
 
+.gamma-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 16px;
+}
