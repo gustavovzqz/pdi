@@ -23,35 +23,6 @@ header {
   box-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-.btn-upload,
-.btn-save {
-  cursor: pointer;
-  padding: 0.3rem 0.8rem; 
-  border: none;
-  border-radius: 3px;
-  font-size: 0.9rem;
-  user-select: none;
-  transition: background-color 0.2s ease;
-}
-
-.btn-upload {
-  background-color: #3a8a3a;
-  color: #d4f5d4;
-}
-
-.btn-upload:hover {
-  background-color: #2d6b2d;
-}
-
-.btn-save {
-  background-color: #2b6bd1;
-  color: #d4e2f7;
-}
-
-.btn-save:hover {
-  background-color: #1f4fbf;
-}
-
 main {
   flex: 1;
   display: flex;
@@ -75,4 +46,105 @@ canvas {
   align-items: center;
   gap: 8px;
   margin-left: 16px;
+}
+
+/* Botões padronizados */
+button,
+.btn-upload,
+.btn-save,
+.btn-piecewise,
+.btn-gamma {
+  cursor: pointer;
+  padding: 0.35rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Cores específicas por botão */
+
+.btn-upload {
+  background-color: #3a8a3a;
+  color: #d4f5d4;
+}
+.btn-upload:hover {
+  background-color: #2d6b2d;
+}
+
+.btn-save {
+  background-color: #2b6bd1;
+  color: #d4e2f7;
+}
+.btn-save:hover {
+  background-color: #1f4fbf;
+}
+
+.btn-piecewise {
+  background-color: #884ea0;
+  color: #f0e8f7;
+}
+.btn-piecewise:hover {
+  background-color: #6e3c85;
+}
+
+.btn-gamma {
+  background-color: #d17f2b;
+  color: #f7f1d4;
+}
+.btn-gamma:hover {
+  background-color: #a45f1a;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+  background-color: #2a2a2a;
+  color: #eee;
+  margin: 5% auto;
+  padding: 20px;
+  border-radius: 6px;
+  width: 460px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+#graph-container {
+  width: 100%;
+  height: 400px;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 10px; right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+.close:hover {
+  color: #fff;
 }

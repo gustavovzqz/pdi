@@ -1,3 +1,6 @@
+import Chart from 'chart.js/auto';
+import dragDataPlugin from 'chartjs-plugin-dragdata';
+
 import { invertColors, gammaCorrection } from './imageProcessor.js';
 
 // Load Image
@@ -24,7 +27,6 @@ export function setupImageLoader(inputImageId, canvas) {
   });
 }
 
-
 // Save Image
 export function setupImageSaver(buttonId, canvas) {
   const btnSave = document.getElementById(buttonId);
@@ -36,7 +38,6 @@ export function setupImageSaver(buttonId, canvas) {
     link.click();
   });
 }
-
 
 // Invert
 export function setupInvertButton(buttonId, canvas) {
@@ -63,3 +64,113 @@ export function setupGammaCorrection(buttonId, inputId, canvas) {
   });
 }
 
+// Graph Modal Setup
+export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId) {
+  const btnPiecewise = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+  const closeModal = document.getElementById(closeId);
+  const btnConfirm = document.getElementById(confirmBtnId);
+
+  let getThresholdPointsFn = null;
+
+  btnPiecewise.addEventListener('click', () => {
+    modal.style.display = 'block';
+    getThresholdPointsFn = setupGraph('graph-container');
+  });
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  btnConfirm.addEventListener('click', () => {
+    if (!getThresholdPointsFn) return;
+
+    const [p1, p2] = getThresholdPointsFn();
+
+    // limiar(p1, p2);
+
+    modal.style.display = 'none';
+  });
+
+}
+
+
+
+export function setupGraph(containerId) {
+  const canvas = document.getElementById(containerId);
+
+  // posições iniciais dos pontos móveis (x,y)
+  let p1 = { x: 0.3, y: 0.3 };
+  let p2 = { x: 0.7, y: 0.7 };
+
+  const data = {
+    datasets: [{
+      label: 'Transformação por Partes',
+      data: [
+        { x: 0, y: 0 },
+        p1,
+        p2,
+        { x: 1, y: 1 }
+      ],
+      showLine: true,
+      borderColor: 'lightgreen',
+      backgroundColor: function(ctx) {
+        const index = ctx.dataIndex;
+        if (index === 1 || index === 2) return 'red';
+        return 'black';
+      },
+      pointRadius: 12,
+      fill: false,
+    }]
+  };
+
+  const options = {
+    scales: {
+      x: { type: 'linear', min: 0, max: 1 },
+      y: { type: 'linear', min: 0, max: 1 }
+    },
+    plugins: {
+      dragData: {
+        round: 3,
+        showTooltip: true,
+        dragX: true,
+        dragY: true,
+        onDragStart: (_e, _datasetIndex, index, _value) => {
+          return index === 1 || index === 2;
+        },
+        onDrag: (_e, _datasetIndex, index, value) => {
+          if (index === 1) {
+            if (value.x > p2.x) value.x = p2.x;
+            value.y = Math.min(Math.max(0, value.y), 1);
+          }
+          if (index === 2) {
+            if (value.x < p1.x) value.x = p1.x;
+            value.y = Math.min(Math.max(0, value.y), 1);
+          }
+        },
+        onDragEnd: (_e, _datasetIndex, index, value) => {
+          if (index === 1) {
+            p1 = { x: value.x, y: value.y };
+          } else if (index === 2) {
+            p2 = { x: value.x, y: value.y };
+          }
+        }
+      }
+    }
+  };
+
+  const _ = new Chart(canvas, {
+    type: 'scatter',
+    data,
+    options,
+    plugins: [dragDataPlugin]
+  });
+
+  return () => [p1, p2];
+}

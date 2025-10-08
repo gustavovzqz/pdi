@@ -17,7 +17,6 @@ export function updateCanvas(canvas, normalizedPixels) {
   const data = imageData.data;
 
   for (let i = 0; i < normalizedPixels.length; i++) {
-    // converte de volta para 0-255 e arredonda
     data[i] = Math.round(normalizedPixels[i] * 255);
   }
 

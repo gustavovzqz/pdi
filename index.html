@@ -13,6 +13,7 @@
     <input type="file" id="input-image" accept="image/*" style="display:none" />
     <button id="btn-save" class="btn-save">Salvar Imagem</button>
     <button id="btn-inv" class="btn-inv">Inverter Cores</button>
+    <button id="btn-piecewise" class="btn-piecewise">Transformação por Partes</button>
     <div class="gamma-controls">
       <label for="gamma-value">Gamma:</label>
       <input
@@ -30,6 +31,18 @@
   <main>
     <canvas id="canvas" width="800" height="600"></canvas>
   </main>
+
+
+
+  <div id="graph-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h2>Transformação por Partes</h2>
+      <canvas id="graph-container" width="400" height="400"></canvas>
+      <button id="confirm-points">Confirmar</button>  <!-- botão novo -->
+    </div>
+  </div>
+
 
   <script type="module" src="src/main.js"></script>
 </body>
