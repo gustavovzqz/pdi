@@ -1,7 +1,8 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection } from './imageProcessor.js';
+import { invertColors, gammaCorrection, linearFunction } from './imageProcessor.js';
+
 
 // Load Image
 export function setupImageLoader(inputImageId, canvas) {
@@ -65,7 +66,7 @@ export function setupGammaCorrection(buttonId, inputId, canvas) {
 }
 
 // Graph Modal Setup
-export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId) {
+export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId, canvas) {
   const btnPiecewise = document.getElementById(buttonId);
   const modal = document.getElementById(modalId);
   const closeModal = document.getElementById(closeId);
@@ -93,7 +94,7 @@ export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId) {
 
     const [p1, p2] = getThresholdPointsFn();
 
-    // limiar(p1, p2);
+    linearFunction(canvas, p1, p2);
 
     modal.style.display = 'none';
   });
@@ -101,9 +102,14 @@ export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId) {
 }
 
 
-
+let chartInstance = null;
 export function setupGraph(containerId) {
   const canvas = document.getElementById(containerId);
+
+  if (chartInstance) {
+    chartInstance.destroy();
+    chartInstance = null;
+  }
 
   // posições iniciais dos pontos móveis (x,y)
   let p1 = { x: 0.3, y: 0.3 };
@@ -165,7 +171,7 @@ export function setupGraph(containerId) {
     }
   };
 
-  const _ = new Chart(canvas, {
+  chartInstance = new Chart(canvas, {
     type: 'scatter',
     data,
     options,

@@ -12,4 +12,4 @@ setupImageLoader('input-image', canvas);
 setupImageSaver('btn-save', canvas);
 setupInvertButton('btn-inv', canvas);
 setupGammaCorrection('btn-gamma', 'gamma-value', canvas);
-setupGraphModal('btn-piecewise', 'graph-modal', 'close-modal', 'confirm-points');
+setupGraphModal('btn-piecewise', 'graph-modal', 'close-modal', 'confirm-points', canvas);

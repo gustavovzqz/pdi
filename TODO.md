@@ -3,7 +3,7 @@
 ## 1. Operações de transformação de intensidade
 - [x] Implementar Negativo da imagem
 - [x] Implementar Correção de gama
-- [ ] Implementar transformação linear definida por partes
+- [x] Implementar transformação linear definida por partes
 
 ## 2. Esteganografia
 - [ ] Implementar método de esteganografia para ocultar informação na imagem
