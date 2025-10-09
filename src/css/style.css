@@ -69,7 +69,6 @@ button,
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
-/* Cores específicas por botão */
 
 .btn-upload {
   background-color: #3a8a3a;
@@ -103,7 +102,6 @@ button,
   background-color: #a45f1a;
 }
 
-/* Modal */
 .modal {
   display: none;
   position: fixed;
@@ -129,6 +127,18 @@ button,
   font-size: 1.2rem;
   text-align: center;
   color: #f0f0f0;
+}
+
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: #1e1e1e;
+  color: #eee;
+  border: 1px solid #555;
+  border-radius: 4px;
+  resize: vertical;
+  font-size: 18px;
+  line-height: 1.6;
 }
 
 #graph-container {

@@ -64,3 +64,46 @@ export function linearFunction(canvas, p1, p2) {
   updateCanvas(canvas, normalized);
 }
 
+
+function textToBin(str) {
+
+  const bits = [];
+
+
+  for (let i = 0; i < str.length; i++) {
+    const charCode = str.charCodeAt(i);
+    const bin = charCode.toString(2).padStart(7, '0');
+    for (let bit of bin) {
+      bits.push(parseInt(bit));
+    }
+  }
+
+  return bits;
+}
+
+export function encodeSteganography(canvas, text) {
+
+
+  // Bit menos signficativo vai ser usado, cada caractere usa 7 bits, cada pixel me dá 3 bits (R, G, B)
+  // imagem 400x400 -> 160000 pixels, 480000 bits -> ~68500 caracteres (muita coisa já...)
+
+  // Padrão de codificação -> Usuário escreve um texto, eu calculo a quantidade de caracteres que o texto possui (até onde ele vai ocupar da imagem)
+  // Eu codifico o seguinte texto: 12341_TEXTO...
+  // _ vai ser um caractere especial qualquer
+  // Texto possui 12341 bits (leio os próximos ...)
+  //
+
+
+  const new_text = text.length + "$" + text;
+  const bits = textToBin(new_text);
+
+  return null;
+}
+
+
+
+export function decodeSteganography(canvas) {
+
+  return ("Teste de retorno");
+
+}

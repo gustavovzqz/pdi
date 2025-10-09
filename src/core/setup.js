@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection, linearFunction } from './imageProcessor.js';
+import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography } from './imageProcessor.js';
 
 
 // Load Image
@@ -66,7 +66,7 @@ export function setupGammaCorrection(buttonId, inputId, canvas) {
 }
 
 // Graph Modal Setup
-export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId, canvas) {
+export function setupPiecewiseGraph(buttonId, modalId, closeId, confirmBtnId, canvas) {
   const btnPiecewise = document.getElementById(buttonId);
   const modal = document.getElementById(modalId);
   const closeModal = document.getElementById(closeId);
@@ -101,7 +101,54 @@ export function setupGraphModal(buttonId, modalId, closeId, confirmBtnId, canvas
 
 }
 
+// Setup Steganography
 
+export function setupSteganography(
+  btnSteganographyId,
+  modalId,
+  closeId,
+  textAreaId,
+  btnDecodifyId,
+  btnCodifyId,
+  canvas) {
+
+  const btnSteganography = document.getElementById(btnSteganographyId);
+  const modal = document.getElementById(modalId);
+  const closeModal = document.getElementById(closeId);
+  const textArea = document.getElementById(textAreaId);
+  const btnCodify = document.getElementById(btnCodifyId);
+  const btnDecodify = document.getElementById(btnDecodifyId);
+
+  btnSteganography.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  btnCodify.addEventListener('click', () => {
+    encodeSteganography(canvas, textArea.value)
+  })
+
+
+  btnDecodify.addEventListener('click', () => {
+    textArea.value = decodeSteganography(canvas);
+  })
+
+}
+
+
+
+
+// Setup Graphic
 let chartInstance = null;
 export function setupGraph(containerId) {
   const canvas = document.getElementById(containerId);
