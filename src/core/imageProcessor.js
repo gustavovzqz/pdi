@@ -104,6 +104,58 @@ export function encodeSteganography(canvas, text) {
 
 export function decodeSteganography(canvas) {
 
-  return ("Teste de retorno");
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const pixels = imageData.data;
+  let text = [];
+  let length_array = [];
+
+
+  let j = 7;
+  let num = 0;
+  let c = '';
+
+  let i;
+  // Loop para encontrar tamanho do texto!
+  for (i = 0; i < pixels.length; i++) {
+    if (i % 4 === 3) continue; // Pula o Alpha
+
+    if (j < 0) {
+      j = 6;
+      c = String.fromCharCode(num);
+      if (c == "$") {
+        break;
+      }
+      length_array.push(c);
+      num = 0;
+    }
+
+    num += Math.pow(2, j) * (pixels[i] & 1);
+    j--;
+  }
+
+  const encoded_length = Number(length_array.join(""));
+
+  j = 6;
+
+  // Agora que já temos o tamanho certo, basta ir buscando... 
+  for (let k = i + 1; k < encoded_length; k++) {
+    if (k % 4 === 3) continue; // Pular canal Alpha
+
+    if (j < 0) {
+      j = 6;
+      c = String.fromCharCode(num);
+      text.push(c);
+      num = 0;
+    }
+
+    num += Math.pow(2, j) * pixels[k];
+    j--;
+  }
+
+
+  const final_string = text.join("");
+
+  return (final_string);
 
 }
