@@ -72,7 +72,7 @@ function textToBin(str) {
 
   for (let i = 0; i < str.length; i++) {
     const charCode = str.charCodeAt(i);
-    const bin = charCode.toString(2).padStart(7, '0');
+    const bin = charCode.toString(2).padStart(8, '0');
     for (let bit of bin) {
       bits.push(parseInt(bit));
     }
@@ -83,79 +83,93 @@ function textToBin(str) {
 
 export function encodeSteganography(canvas, text) {
 
-
-  // Bit menos signficativo vai ser usado, cada caractere usa 7 bits, cada pixel me dá 3 bits (R, G, B)
-  // imagem 400x400 -> 160000 pixels, 480000 bits -> ~68500 caracteres (muita coisa já...)
-
-  // Padrão de codificação -> Usuário escreve um texto, eu calculo a quantidade de caracteres que o texto possui (até onde ele vai ocupar da imagem)
-  // Eu codifico o seguinte texto: 12341_TEXTO...
-  // _ vai ser um caractere especial qualquer
-  // Texto possui 12341 bits (leio os próximos ...)
-  //
-
-
   const new_text = text.length + "$" + text;
   const bits = textToBin(new_text);
 
-  return null;
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const pixels = imageData.data;
+  let k = 0;
+
+  for (let i = 0; i < bits.length; i++) {
+
+    if (k % 4 === 3) {
+      k++;
+    }
+    console.log(bits[i]);
+    console.log(pixels[k]);
+    pixels[k] = ((pixels[k] & 0b11111110) | bits[i]);
+    console.log(pixels[k]);
+    k++;
+
+  }
+
+  ctx.putImageData(imageData, 0, 0);
+
 }
 
 
 
 export function decodeSteganography(canvas) {
-
   const ctx = canvas.getContext('2d');
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const pixels = imageData.data;
+
   let text = [];
   let length_array = [];
-
 
   let j = 7;
   let num = 0;
   let c = '';
+  let i = 0;
 
-  let i;
-  // Loop para encontrar tamanho do texto!
-  for (i = 0; i < pixels.length; i++) {
-    if (i % 4 === 3) continue; // Pula o Alpha
-
-    if (j < 0) {
-      j = 6;
-      c = String.fromCharCode(num);
-      if (c == "$") {
-        break;
-      }
-      length_array.push(c);
-      num = 0;
+  while (i < pixels.length) {
+    if (i % 4 === 3) {
+      i++; // pular canal alpha
+      continue;
     }
 
     num += Math.pow(2, j) * (pixels[i] & 1);
     j--;
-  }
-
-  const encoded_length = Number(length_array.join(""));
-
-  j = 6;
-
-  // Agora que já temos o tamanho certo, basta ir buscando... 
-  for (let k = i + 1; k < encoded_length; k++) {
-    if (k % 4 === 3) continue; // Pular canal Alpha
 
     if (j < 0) {
-      j = 6;
+      j = 7;
       c = String.fromCharCode(num);
-      text.push(c);
+      if (c === "$") break;
+      length_array.push(c);
       num = 0;
     }
 
-    num += Math.pow(2, j) * pixels[k];
-    j--;
+    i++;
   }
 
+  const encoded_length = Number(length_array.join(""));
+  const total_bits = encoded_length * 8;
 
-  const final_string = text.join("");
+  j = 7;
+  num = 0;
+  c = '';
+  let bits_read = 0;
+  i++;
 
-  return (final_string);
+  while (i < pixels.length && bits_read < total_bits) {
+    if (i % 4 === 3) {
+      i++;
+      continue;
+    }
 
+    num += Math.pow(2, j) * (pixels[i] & 1);
+    j--;
+    bits_read++;
+
+    if (j < 0) {
+      j = 7;
+      text.push(String.fromCharCode(num));
+      num = 0;
+    }
+
+    i++;
+  }
+
+  return text.join('');
 }

@@ -6,7 +6,7 @@
 - [x] Implementar transformação linear definida por partes
 
 ## 2. Esteganografia
-- [ ] Implementar método de esteganografia para ocultar informação na imagem
+- [x] Implementar método de esteganografia para ocultar informação na imagem
 
 ## 3. Análise de histograma
 - [ ] Implementar exibição do histograma da imagem

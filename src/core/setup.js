@@ -121,6 +121,7 @@ export function setupSteganography(
 
   btnSteganography.addEventListener('click', () => {
     modal.style.display = 'block';
+    textArea.value = "";
   });
 
 
@@ -136,6 +137,7 @@ export function setupSteganography(
 
   btnCodify.addEventListener('click', () => {
     encodeSteganography(canvas, textArea.value)
+    textArea.value = "";
   })
 
 
