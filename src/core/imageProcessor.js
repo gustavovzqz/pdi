@@ -96,10 +96,7 @@ export function encodeSteganography(canvas, text) {
     if (k % 4 === 3) {
       k++;
     }
-    console.log(bits[i]);
-    console.log(pixels[k]);
     pixels[k] = ((pixels[k] & 0b11111110) | bits[i]);
-    console.log(pixels[k]);
     k++;
 
   }
