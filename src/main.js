@@ -1,5 +1,6 @@
 import {
   setupGammaCorrection,
+  setupGrayScale,
   setupImageLoader,
   setupImageSaver,
   setupInvertButton,
@@ -28,3 +29,5 @@ setupSteganography(
   'btn-decodify',
   'btn-codify',
   canvas)
+
+setupGrayScale(canvas, 'btn-gray')

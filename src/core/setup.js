@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography } from './imageProcessor.js';
+import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale } from './imageProcessor.js';
 
 
 // Load Image
@@ -97,6 +97,18 @@ export function setupPiecewiseGraph(buttonId, modalId, closeId, confirmBtnId, ca
     linearFunction(canvas, p1, p2);
 
     modal.style.display = 'none';
+  });
+
+}
+
+// Setup GrayScale
+
+export function setupGrayScale(canvas, btnGrayScaleId) {
+
+  const btnGray = document.getElementById(btnGrayScaleId);
+
+  btnGray.addEventListener('click', () => {
+    updateToGrayScale(canvas);
   });
 
 }

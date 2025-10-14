@@ -1,4 +1,4 @@
-import { getNormalizedPixels, updateCanvas } from './utils.js';
+import { getNormalizedPixels, getYChannel, updateCanvas } from './utils.js';
 
 const RGBA_SHIFT = 4;
 
@@ -169,4 +169,11 @@ export function decodeSteganography(canvas) {
   }
 
   return text.join('');
+}
+
+export function updateToGrayScale(canvas) {
+
+  const yChannel = getYChannel(canvas);
+  updateCanvas(canvas, yChannel);
+
 }
