@@ -28,6 +28,7 @@
       <button id="btn-gamma" class="btn-gamma">Aplicar Correção Gama</button>
     </div>
     <button id="btn-gray" class="btn-gray">Converter em Escala de Cinza</button>
+    <button id="btn-hist" class="btn-hist">Exibição do Histograma</button>
   </header>
 
   <main>
@@ -40,6 +41,15 @@
       <h2>Transformação por Partes</h2>
       <canvas id="graph-container" width="400" height="400"></canvas>
       <button id="confirm-graph-points">Confirmar</button> 
+    </div>
+  </div>
+
+  <div id="hist-modal" class="modal">
+    <div class="modal-content">
+      <span id="close-hist-modal" class="close">&times;</span>
+      <h2>Histograma</h2>
+      <canvas id="hist-container" width="400" height="400"></canvas>
+      <button id="btn-equalize">Equalizar</button> 
     </div>
   </div>
 

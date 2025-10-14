@@ -1,6 +1,7 @@
 import {
   setupGammaCorrection,
   setupGrayScale,
+  setupHistogramAnalysis,
   setupImageLoader,
   setupImageSaver,
   setupInvertButton,
@@ -30,4 +31,14 @@ setupSteganography(
   'btn-codify',
   canvas)
 
+setupHistogramAnalysis(
+  'btn-hist',
+  'hist-modal',
+  'close-hist-modal',
+  'btn-equalize',
+  canvas
+)
+
 setupGrayScale(canvas, 'btn-gray')
+
+

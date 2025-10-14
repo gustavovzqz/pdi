@@ -3,6 +3,8 @@ import dragDataPlugin from 'chartjs-plugin-dragdata';
 
 import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale } from './imageProcessor.js';
 
+import { getYChannel } from './utils.js';
+
 
 // Load Image
 export function setupImageLoader(inputImageId, canvas) {
@@ -163,13 +165,13 @@ export function setupSteganography(
 
 
 // Setup Graphic
-let chartInstance = null;
-export function setupGraph(containerId) {
+let chartGraphInstance = null;
+function setupGraph(containerId) {
   const canvas = document.getElementById(containerId);
 
-  if (chartInstance) {
-    chartInstance.destroy();
-    chartInstance = null;
+  if (chartGraphInstance) {
+    chartGraphInstance.destroy();
+    chartGraphInstance = null;
   }
 
   // posições iniciais dos pontos móveis (x,y)
@@ -241,3 +243,95 @@ export function setupGraph(containerId) {
 
   return () => [p1, p2];
 }
+
+// Histogram Setup
+
+export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, canvas) {
+
+  const btnHistogram = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+  const closeModal = document.getElementById(closeId);
+  const btnEqualize = document.getElementById(equalizeId);
+
+
+  btnHistogram.addEventListener('click', () => {
+
+    modal.style.display = 'block';
+    setupHistogramGraphics('hist-container', canvas);
+  })
+
+  closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+  })
+
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+  btnEqualize.addEventListener('click', () => {
+    // updateHistogram...
+    modal.style.display = 'none';
+  })
+}
+
+
+
+
+
+function setupHistogramGraphics(containerId, canvas) {
+  const histCanvas = document.getElementById(containerId);
+  const ctxHist = histCanvas.getContext('2d');
+
+  const yChannel = getYChannel(canvas);
+  const histogram = new Array(256).fill(0);
+
+  for (let i = 0; i < yChannel.length; i += 4) {
+    const intensity = Math.min(255, Math.floor(yChannel[i] * 255));
+    histogram[intensity]++;
+  }
+
+  if (window.histogramChart) {
+    window.histogramChart.destroy();
+  }
+
+  const chartData = {
+    labels: [...Array(256).keys()],
+    datasets: [{
+      label: 'Frequência de Intensidade',
+      data: histogram,
+      backgroundColor: 'rgba(0, 0, 255, 1)',
+      borderColor: 'rgba(0, 0, 150, 1)',
+      borderWidth: 1.5,
+      barPercentage: 1.0,
+      categoryPercentage: 1.0,
+    }]
+  };
+
+  const chartOptions = {
+    scales: {
+      x: {
+        title: { display: true, text: 'Intensidade (0-255)' },
+        ticks: { maxTicksLimit: 13 },
+        grid: { display: true }
+      },
+      y: {
+        title: { display: true, text: 'Número de Pixels' },
+        beginAtZero: true,
+        grid: { display: false }
+      }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  };
+
+  window.histogramChart = new Chart(ctxHist, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
+}
+
