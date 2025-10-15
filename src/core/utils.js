@@ -49,3 +49,91 @@ export function getYChannel(canvas) {
   return yChannel;
 }
 
+
+
+export function splitImage(canvas) {
+  const { width, height } = canvas;
+
+  const normalized = getNormalizedPixels(canvas);
+
+  const R = [];
+  const G = [];
+  const B = [];
+
+  for (let y = 0; y < height; y++) {
+    const rowR = [];
+    const rowG = [];
+    const rowB = [];
+
+    for (let x = 0; x < width; x++) {
+      const index = (y * width + x) * 4;
+      rowR.push(normalized[index]);     // Red
+      rowG.push(normalized[index + 1]); // Green
+      rowB.push(normalized[index + 2]); // Blue
+    }
+
+    R.push(rowR);
+    G.push(rowG);
+    B.push(rowB);
+  }
+
+  return { R, G, B };
+}
+
+export function unifyImage(R, G, B) {
+  const height = R.length;
+  const width = R[0].length;
+
+  const output = new Float32Array(width * height * 4);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const index = (y * width + x) * 4;
+      output[index] = R[y][x];        // R
+      output[index + 1] = G[y][x];    // G
+      output[index + 2] = B[y][x];    // B
+      output[index + 3] = 1.0;        // A 
+    }
+  }
+
+  return output;
+}
+
+export function applyGenericConvolution(convMatrix, imageMatrix) {
+  const CONV_SIZE = convMatrix.length;
+  const IMAGE_X_SIZE = imageMatrix.length;
+  const IMAGE_Y_SIZE = imageMatrix[0].length;
+
+  const half = Math.floor(CONV_SIZE / 2);
+
+  const outputMatrix = Array.from({ length: IMAGE_X_SIZE }, () =>
+    Array(IMAGE_Y_SIZE).fill(0)
+  );
+
+  for (let i = 0; i < IMAGE_X_SIZE; i++) {
+    for (let j = 0; j < IMAGE_Y_SIZE; j++) {
+      let result = 0;
+
+      for (let i_conv = 0; i_conv < CONV_SIZE; i_conv++) {
+        for (let j_conv = 0; j_conv < CONV_SIZE; j_conv++) {
+          const x = i - half + i_conv;
+          const y = j - half + j_conv;
+
+          // Se estiver fora da imagem, considera 0
+          if (x >= 0 && x < IMAGE_X_SIZE && y >= 0 && y < IMAGE_Y_SIZE) {
+            result += imageMatrix[x][y] * convMatrix[i_conv][j_conv];
+          } else {
+            result += 0;
+          }
+        }
+      }
+
+      outputMatrix[i][j] = result;
+    }
+  }
+
+  return outputMatrix;
+}
+
+
+

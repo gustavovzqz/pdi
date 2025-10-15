@@ -1,11 +1,11 @@
-import { getNormalizedPixels, getYChannel, updateCanvas } from './utils.js';
+import * as utils from './utils.js';
 
 const RGBA_SHIFT = 4;
 
 // Invert
 
 export function invertColors(canvas) {
-  const normalized = getNormalizedPixels(canvas);
+  const normalized = utils.getNormalizedPixels(canvas);
 
   for (let i = 0; i < normalized.length; i += RGBA_SHIFT) {
     for (let j = 0; j < 3; j++) { // R G B
@@ -13,12 +13,12 @@ export function invertColors(canvas) {
     }
   }
 
-  updateCanvas(canvas, normalized);
+  utils.updateCanvas(canvas, normalized);
 }
 // Gamma
 export function gammaCorrection(canvas, gammaFactor) {
 
-  const normalized = getNormalizedPixels(canvas);
+  const normalized = utils.getNormalizedPixels(canvas);
 
   for (let i = 0; i < normalized.length; i += RGBA_SHIFT) {
     for (let j = 0; j < 3; j++) { // R G B
@@ -26,11 +26,11 @@ export function gammaCorrection(canvas, gammaFactor) {
     }
   }
 
-  updateCanvas(canvas, normalized);
+  utils.updateCanvas(canvas, normalized);
 }
 // Linear 
 export function linearFunction(canvas, p1, p2) {
-  const normalized = getNormalizedPixels(canvas);
+  const normalized = utils.getNormalizedPixels(canvas);
 
   // First line (0,0) to p1
   const m1 = p1.y / p1.x;
@@ -61,7 +61,7 @@ export function linearFunction(canvas, p1, p2) {
     }
   }
 
-  updateCanvas(canvas, normalized);
+  utils.updateCanvas(canvas, normalized);
 }
 
 
@@ -173,14 +173,14 @@ export function decodeSteganography(canvas) {
 
 export function updateToGrayScale(canvas) {
 
-  const yChannel = getYChannel(canvas);
-  updateCanvas(canvas, yChannel);
+  const yChannel = utils.getYChannel(canvas);
+  utils.updateCanvas(canvas, yChannel);
 
 }
 
 
 export function equalizeHistogram(canvas) {
-  const yChannel = getYChannel(canvas); // valores normalizados entre 0 e 1
+  const yChannel = utils.getYChannel(canvas); // valores normalizados entre 0 e 1
   const hist = new Array(256).fill(0);
 
   // 1. Construir o histograma (valores entre 0 e 255)
@@ -210,11 +210,28 @@ export function equalizeHistogram(canvas) {
   }
 
   // 5. Atualizar a imagem
-  updateCanvas(canvas, equalized);
+  utils.updateCanvas(canvas, equalized);
 }
 
 export function binarizeImage(canvas) {
-  const yChannel = getYChannel(canvas);
+  const yChannel = utils.getYChannel(canvas);
   const binary = yChannel.map(value => value < 0.5 ? 0 : 1);
-  updateCanvas(canvas, binary);
+  utils.updateCanvas(canvas, binary);
+}
+
+export function applyConvolution(convMatrix, canvas) {
+
+  const { R, G, B } = utils.splitImage(canvas);
+
+  const R_conv = utils.applyGenericConvolution(convMatrix, R);
+  const G_conv = utils.applyGenericConvolution(convMatrix, G);
+  const B_conv = utils.applyGenericConvolution(convMatrix, B);
+
+  const unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
+
+  utils.updateCanvas(canvas, unifiedImage)
+
+
+
+
 }

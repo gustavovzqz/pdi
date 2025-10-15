@@ -1,5 +1,6 @@
 import {
-  SetupBinarization,
+  setupBinarization,
+  setupConvolution,
   setupGammaCorrection,
   setupGrayScale,
   setupHistogramAnalysis,
@@ -40,6 +41,8 @@ setupHistogramAnalysis(
   canvas
 )
 
+
+setupConvolution('btn-conv', canvas);
 setupGrayScale(canvas, 'btn-gray')
-SetupBinarization('btn-limiar', canvas);
+setupBinarization('btn-limiar', canvas);
 

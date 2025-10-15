@@ -1,9 +1,9 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale, equalizeHistogram, binarizeImage } from './imageProcessor.js';
-
-import { getYChannel } from './utils.js';
+import * as imageProcessor from './imageProcessor.js';
+import * as utils from './utils.js';
+import * as convMatrices from './conv_matrices.js'
 
 
 // Load Image
@@ -46,7 +46,7 @@ export function setupImageSaver(buttonId, canvas) {
 export function setupInvertButton(buttonId, canvas) {
   const btn = document.getElementById(buttonId);
   btn.addEventListener('click', () => {
-    invertColors(canvas);
+    imageProcessor.invertColors(canvas);
   });
 }
 
@@ -63,7 +63,7 @@ export function setupGammaCorrection(buttonId, inputId, canvas) {
       return;
     }
 
-    gammaCorrection(canvas, gamma);
+    imageProcessor.gammaCorrection(canvas, gamma);
   });
 }
 
@@ -96,7 +96,7 @@ export function setupPiecewiseGraph(buttonId, modalId, closeId, confirmBtnId, ca
 
     const [p1, p2] = getThresholdPointsFn();
 
-    linearFunction(canvas, p1, p2);
+    imageProcessor.linearFunction(canvas, p1, p2);
 
     modal.style.display = 'none';
   });
@@ -110,7 +110,7 @@ export function setupGrayScale(canvas, btnGrayScaleId) {
   const btnGray = document.getElementById(btnGrayScaleId);
 
   btnGray.addEventListener('click', () => {
-    updateToGrayScale(canvas);
+    imageProcessor.updateToGrayScale(canvas);
   });
 
 }
@@ -150,13 +150,13 @@ export function setupSteganography(
   });
 
   btnCodify.addEventListener('click', () => {
-    encodeSteganography(canvas, textArea.value)
+    imageProcessor.encodeSteganography(canvas, textArea.value)
     textArea.value = "";
   })
 
 
   btnDecodify.addEventListener('click', () => {
-    textArea.value = decodeSteganography(canvas);
+    textArea.value = imageProcessor.decodeSteganography(canvas);
   })
 
 }
@@ -272,20 +272,17 @@ export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, c
   });
 
   btnEqualize.addEventListener('click', () => {
-    equalizeHistogram(canvas);
+    imageProcessor.equalizeHistogram(canvas);
     modal.style.display = 'none';
   })
 }
-
-
-
 
 
 function setupHistogramGraphics(containerId, canvas) {
   const histCanvas = document.getElementById(containerId);
   const ctxHist = histCanvas.getContext('2d');
 
-  const yChannel = getYChannel(canvas);
+  const yChannel = utils.getYChannel(canvas);
   const histogram = new Array(256).fill(0);
 
   for (let i = 0; i < yChannel.length; i += 4) {
@@ -338,14 +335,21 @@ function setupHistogramGraphics(containerId, canvas) {
 
 // Setup Binarization
 
-export function SetupBinarization(btnId, canvas) {
+export function setupBinarization(btnId, canvas) {
 
   const btnLimiar = document.getElementById(btnId);
 
   btnLimiar.addEventListener('click', () => {
-    binarizeImage(canvas);
+    imageProcessor.binarizeImage(canvas);
   });
-
-
-
 }
+
+export function setupConvolution(btnId, canvas) {
+
+  const btnConv = document.getElementById(btnId);
+
+  btnConv.addEventListener('click', () => {
+    imageProcessor.applyConvolution(convMatrices.gaussianBlur, canvas);
+  });
+}
+

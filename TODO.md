@@ -16,10 +16,10 @@
 - [x] Implementar limiarização (binarização) da imagem
 
 ## 5. Filtragem por convolução
-- [ ] Implementar função genérica para filtro por convolução
+- [x] Implementar função genérica para filtro por convolução
 - [ ] Permitir que usuário escolha tamanho do filtro (3x3, 5x5, 7x7, 9x9, etc)
-- [ ] Aplicar bordas pretas para manter tamanho original da imagem após convolução
-- [ ] Normalizar valores resultantes da convolução para faixa 0-255 para exibição
+- [x] Aplicar bordas pretas para manter tamanho original da imagem após convolução
+- [x] Normalizar valores resultantes da convolução para faixa 0-255 para exibição
 
 ## 6. Filtros específicos
 - [ ] Filtro de suavização da média simples
