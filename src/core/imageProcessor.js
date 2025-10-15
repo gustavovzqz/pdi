@@ -177,3 +177,38 @@ export function updateToGrayScale(canvas) {
   updateCanvas(canvas, yChannel);
 
 }
+
+
+export function equalizeHistogram(canvas) {
+  const yChannel = getYChannel(canvas); // valores normalizados entre 0 e 1
+  const hist = new Array(256).fill(0);
+
+  // 1. Construir o histograma (valores entre 0 e 255)
+  for (let i = 0; i < yChannel.length; i++) {
+    const val = Math.floor(yChannel[i] * 255);
+    hist[val]++;
+  }
+
+  // 2. Normalizar o histograma
+  const total = yChannel.length;
+  const prob = hist.map(count => count / total);
+
+  // 3. Calcular a CDF
+  const cdf = [];
+  let sum = 0;
+  for (let i = 0; i < prob.length; i++) {
+    sum += prob[i];
+    cdf[i] = sum;
+  }
+
+  // 4. Mapear os valores antigos para novos
+  const equalized = new Float32Array(yChannel.length);
+  for (let i = 0; i < yChannel.length; i++) {
+    const val = Math.floor(yChannel[i] * 255);
+    const newVal = cdf[val] * 255;
+    equalized[i] = newVal / 255;
+  }
+
+  // 5. Atualizar a imagem
+  updateCanvas(canvas, equalized);
+}

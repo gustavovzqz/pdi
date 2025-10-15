@@ -9,8 +9,8 @@
 - [x] Implementar método de esteganografia para ocultar informação na imagem
 
 ## 3. Análise de histograma
-- [ ] Implementar exibição do histograma da imagem
-- [ ] Implementar ajuste de contraste por equalização de histograma
+- [x] Implementar exibição do histograma da imagem
+- [x] Implementar ajuste de contraste por equalização de histograma
 
 ## 4. Segmentação
 - [ ] Implementar limiarização (binarização) da imagem

@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale } from './imageProcessor.js';
+import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale, equalizeHistogram } from './imageProcessor.js';
 
 import { getYChannel } from './utils.js';
 
@@ -272,7 +272,7 @@ export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, c
   });
 
   btnEqualize.addEventListener('click', () => {
-    // updateHistogram...
+    equalizeHistogram(canvas);
     modal.style.display = 'none';
   })
 }
