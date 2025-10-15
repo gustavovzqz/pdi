@@ -212,3 +212,9 @@ export function equalizeHistogram(canvas) {
   // 5. Atualizar a imagem
   updateCanvas(canvas, equalized);
 }
+
+export function binarizeImage(canvas) {
+  const yChannel = getYChannel(canvas);
+  const binary = yChannel.map(value => value < 0.5 ? 0 : 1);
+  updateCanvas(canvas, binary);
+}

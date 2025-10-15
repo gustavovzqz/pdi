@@ -1,4 +1,5 @@
 import {
+  SetupBinarization,
   setupGammaCorrection,
   setupGrayScale,
   setupHistogramAnalysis,
@@ -40,5 +41,5 @@ setupHistogramAnalysis(
 )
 
 setupGrayScale(canvas, 'btn-gray')
-
+SetupBinarization('btn-limiar', canvas);
 

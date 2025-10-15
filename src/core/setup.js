@@ -1,7 +1,7 @@
 import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
-import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale, equalizeHistogram } from './imageProcessor.js';
+import { invertColors, gammaCorrection, linearFunction, encodeSteganography, decodeSteganography, updateToGrayScale, equalizeHistogram, binarizeImage } from './imageProcessor.js';
 
 import { getYChannel } from './utils.js';
 
@@ -335,3 +335,17 @@ function setupHistogramGraphics(containerId, canvas) {
   });
 }
 
+
+// Setup Binarization
+
+export function SetupBinarization(btnId, canvas) {
+
+  const btnLimiar = document.getElementById(btnId);
+
+  btnLimiar.addEventListener('click', () => {
+    binarizeImage(canvas);
+  });
+
+
+
+}

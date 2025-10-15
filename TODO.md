@@ -13,7 +13,7 @@
 - [x] Implementar ajuste de contraste por equalização de histograma
 
 ## 4. Segmentação
-- [ ] Implementar limiarização (binarização) da imagem
+- [x] Implementar limiarização (binarização) da imagem
 
 ## 5. Filtragem por convolução
 - [ ] Implementar função genérica para filtro por convolução
