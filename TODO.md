@@ -24,15 +24,15 @@
 ## 6. Filtros específicos
 - [ ] Filtro de suavização da média simples
 - [ ] Filtro de suavização da média ponderada
-- [ ] Pré-definir filtro Gaussiano 3x3
-- [ ] Pré-definir filtro Laplaciano 3x3
+- [x] Pré-definir filtro Gaussiano 3x3
+- [x] Pré-definir filtro Laplaciano 3x3
 - [ ] Filtragem pela mediana com tamanho de filtro variável
 
 ## 7. Realce e detecção de bordas
 - [ ] Implementar aguçamento (nitidez) por filtro Laplaciano
 - [ ] Implementar aguçamento por filtro High-Boost
-- [ ] Implementar filtros de Sobel (gradiente em X)
-- [ ] Implementar filtros de Sobel (gradiente em Y)
+- [x] Implementar filtros de Sobel (gradiente em X)
+- [x] Implementar filtros de Sobel (gradiente em Y)
 - [ ] Implementar detecção não linear de bordas pelo gradiente (magnitude)
 
 ## 8. Fourier

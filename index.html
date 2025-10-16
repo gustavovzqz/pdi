@@ -30,7 +30,10 @@
     <button id="btn-gray" class="btn-gray">Converter em Escala de Cinza</button>
     <button id="btn-hist" class="btn-hist">Exibição do Histograma</button>
     <button id="btn-limiar" class="btn-limiar">Binarização</button>
+    <div class="convolution">
     <button id="btn-conv" class="btn-conv">Convolução</button>
+    <button id="btn-conv-manual" class="btn-conv">Convolução Manual</button>
+    </div>
   </header>
 
   <main>
@@ -65,6 +68,42 @@
       <button id="btn-codify">Codificar</button> 
     </div>
   </div>
+
+
+
+
+<div id="conv-modal" class="modal">
+  <div class="modal-content">
+    <h2>Convolução</h2>
+
+    <label for="preset">Escolha uma matriz predefinida:</label>
+    <select id="preset">
+      <option value="laplaciano">Laplaciano</option>
+      <option value="gaussiana">Gaussiana</option>
+      <option value="sobelX">Sobel em X</option>
+      <option value="sobelY">Sobel em Y</option>
+    </select>
+
+    <pre id="preset-display" class="preset-display"></pre>
+
+    <button id="apply-conv-btn" class="btn-apply-conv">Aplicar Convolução</button>
+  </div>
+</div>
+
+
+<div id="conv-manual-modal" class="modal">
+  <div class="modal-content">
+    <h2>Convolução Manual</h2>
+
+    <label for="matrix-size">Tamanho da Matriz (N x N):</label>
+    <input type="number" id="matrix-size" min="1" value="3" />
+    <button id="btn-generate-matrix">Gerar Matriz</button>
+
+    <div id="matrix-container" class="matrix-container"></div>
+
+    <button id="apply-manual-conv-btn" class="btn-apply-conv">Aplicar Convolução</button>
+  </div>
+</div>
 
   <script type="module" src="src/main.js"></script>
 </body>

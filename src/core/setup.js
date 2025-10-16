@@ -234,7 +234,7 @@ function setupGraph(containerId) {
     }
   };
 
-  chartInstance = new Chart(canvas, {
+  chartGraphInstance = new Chart(canvas, {
     type: 'scatter',
     data,
     options,
@@ -276,6 +276,7 @@ export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, c
     modal.style.display = 'none';
   })
 }
+
 
 
 function setupHistogramGraphics(containerId, canvas) {
@@ -344,12 +345,161 @@ export function setupBinarization(btnId, canvas) {
   });
 }
 
-export function setupConvolution(btnId, canvas) {
+export function setupConvolution({
+  triggerBtnId,
+  modalId,
+  presetSelectId,
+  presetDisplayId,
+  applyBtnId,
+  canvas
+}) {
+  const btnTrigger = document.getElementById(triggerBtnId);
+  const modal = document.getElementById(modalId);
+  const btnApply = document.getElementById(applyBtnId);
+  const select = document.getElementById(presetSelectId);
+  const display = document.getElementById(presetDisplayId);
 
-  const btnConv = document.getElementById(btnId);
+  btnTrigger.addEventListener('click', () => {
+    modal.style.display = 'block';
+    showPresetMatrix(select.id, display.id);
+  });
 
-  btnConv.addEventListener('click', () => {
-    imageProcessor.applyConvolution(convMatrices.gaussianBlur, canvas);
+  select.addEventListener('change', () => {
+    showPresetMatrix(select.id, display.id);
+  });
+
+  btnApply.addEventListener('click', () => {
+    const matrix = getSelectedPresetMatrix(select.id);
+
+    if (matrix.length > 0) {
+      imageProcessor.applyConvolution(matrix, canvas);
+      modal.style.display = 'none';
+    } else {
+      alert('Selecione uma matriz válida.');
+    }
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
   });
 }
 
+function getSelectedPresetMatrix(selectId) {
+  const preset = document.getElementById(selectId).value;
+
+  switch (preset) {
+    case 'laplaciano':
+      return convMatrices.laplacian;
+    case 'gaussiana':
+      return convMatrices.gaussianBlur;
+    case 'sobelX':
+      return convMatrices.sobelX;
+    case 'sobelY':
+      return convMatrices.sobelY;
+    default:
+      return [];
+  }
+}
+
+function showPresetMatrix(selectId, displayId) {
+  const matrix = getSelectedPresetMatrix(selectId);
+  document.getElementById(displayId).textContent =
+    matrix.map(row => row.join('\t')).join('\n');
+}
+
+
+export function setupManualConvolution(
+  triggerBtnId,
+  modalId,
+  sizeInputId,
+  generateBtnId,
+  matrixContainerId,
+  applyBtnId,
+  canvas
+) {
+  const btnTrigger = document.getElementById(triggerBtnId);
+  const modal = document.getElementById(modalId);
+  const inputSize = document.getElementById(sizeInputId);
+  const btnGenerate = document.getElementById(generateBtnId);
+  const matrixContainer = document.getElementById(matrixContainerId);
+  const btnApply = document.getElementById(applyBtnId);
+
+  btnTrigger.addEventListener('click', () => {
+    modal.style.display = 'block';
+    matrixContainer.innerHTML = '';
+  });
+
+  btnGenerate.addEventListener('click', () => {
+    const size = parseInt(inputSize.value);
+    if (isNaN(size) || size < 1) {
+      alert('Digite um tamanho válido (número maior que 0)');
+      return;
+    }
+
+    if (size % 2 === 0) {
+      alert('Digite um número ímpar para o tamanho da matriz (ex: 3, 5, 7...)');
+      return;
+    }
+    generateMatrixInputs(matrixContainer, size);
+  });
+
+  btnApply.addEventListener('click', () => {
+    const matrix = readMatrixFromInputs(matrixContainer);
+    if (!matrix) {
+      alert('Matriz inválida ou incompleta');
+      return;
+    }
+
+    imageProcessor.applyConvolution(matrix, canvas);
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+}
+
+function generateMatrixInputs(container, size) {
+  container.innerHTML = '';
+  container.dataset.size = size;
+
+  container.style.display = 'grid';
+  container.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+  container.style.gap = '6px';
+
+  for (let i = 0; i < size * size; i++) {
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.step = 'any';
+    input.style.width = '100%';
+    input.style.textAlign = 'center';
+    input.placeholder = '0';
+    container.appendChild(input);
+  }
+}
+
+function readMatrixFromInputs(container) {
+  const size = parseInt(container.dataset.size);
+  if (!size) return null;
+
+  const inputs = container.querySelectorAll('input');
+  if (inputs.length !== size * size) return null;
+
+  const matrix = [];
+  for (let row = 0; row < size; row++) {
+    const rowValues = [];
+    for (let col = 0; col < size; col++) {
+      const val = inputs[row * size + col].value;
+      if (val.trim() === '' || isNaN(Number(val))) {
+        return null;
+      }
+      rowValues.push(Number(val));
+    }
+    matrix.push(rowValues);
+  }
+  return matrix;
+}

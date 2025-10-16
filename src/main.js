@@ -8,7 +8,8 @@ import {
   setupImageSaver,
   setupInvertButton,
   setupPiecewiseGraph,
-  setupSteganography
+  setupSteganography,
+  setupManualConvolution
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -42,7 +43,26 @@ setupHistogramAnalysis(
 )
 
 
-setupConvolution('btn-conv', canvas);
 setupGrayScale(canvas, 'btn-gray')
 setupBinarization('btn-limiar', canvas);
 
+
+
+setupConvolution({
+  triggerBtnId: 'btn-conv',
+  modalId: 'conv-modal',
+  presetSelectId: 'preset',
+  presetDisplayId: 'preset-display',
+  applyBtnId: 'apply-conv-btn',
+  canvas
+});
+
+setupManualConvolution(
+  'btn-conv-manual',
+  'conv-manual-modal',
+  'matrix-size',
+  'btn-generate-matrix',
+  'matrix-container',
+  'apply-manual-conv-btn',
+  canvas
+);
