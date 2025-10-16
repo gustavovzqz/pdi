@@ -211,15 +211,6 @@ input[type="number"] {
   border-color: #d17f2b;
 }
 
-.matrix-container[data-size="1"] { grid-template-columns: repeat(1, 1fr); }
-.matrix-container[data-size="2"] { grid-template-columns: repeat(2, 1fr); }
-.matrix-container[data-size="3"] { grid-template-columns: repeat(3, 1fr); }
-.matrix-container[data-size="4"] { grid-template-columns: repeat(4, 1fr); }
-.matrix-container[data-size="5"] { grid-template-columns: repeat(5, 1fr); }
-.matrix-container[data-size="6"] { grid-template-columns: repeat(6, 1fr); }
-.matrix-container[data-size="7"] { grid-template-columns: repeat(7, 1fr); }
-.matrix-container[data-size="8"] { grid-template-columns: repeat(8, 1fr); }
-.matrix-container[data-size="9"] { grid-template-columns: repeat(9, 1fr); }
 
 .btn-apply-conv {
   margin-top: 20px;
