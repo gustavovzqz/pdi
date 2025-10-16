@@ -185,23 +185,15 @@ export function applyGenericMedianFilter(size, imageMatrix) {
 
 
 
-export function add(canvas, image, k) {
-
-  // image está normalizada, preciso desnormalizar no processo
-  const ctx = canvas.getContext('2d');
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-  const data = imageData.data;
+export function add(data, image, k) {
+  const result = new Float32Array(data.length);
 
   for (let i = 0; i < data.length; i += 4) {
-    data[i] = data[i] + k * image[i] * 255;     // R
-    data[i + 1] = data[i + 1] + k * image[i + 1] * 255; // G
-    data[i + 2] = data[i + 2] + k * image[i + 2] * 255; // B
-    // alpha (data[i+3]) permanece inalterado
+    result[i] = data[i] + k * image[i];         // R
+    result[i + 1] = data[i + 1] + k * image[i + 1]; // G
+    result[i + 2] = data[i + 2] + k * image[i + 2]; // B
+    result[i + 3] = data[i + 3];
   }
 
-  ctx.putImageData(imageData, 0, 0);
+  return result;
 }
-
-
-

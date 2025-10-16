@@ -299,9 +299,32 @@ export function laplacianSharp(canvas, k) {
   const G_conv = utils.applyGenericConvolution(laplace_matrix, G);
   const B_conv = utils.applyGenericConvolution(laplace_matrix, B);
 
-  const unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
 
-  utils.add(canvas, unifiedImage, k);
+  const laplacian_image = utils.unifyImage(R_conv, G_conv, B_conv);
 
+  const image_normalized = utils.getNormalizedPixels(canvas);
+  const sharpened_image = utils.add(image_normalized, laplacian_image, -1 * k);
+  utils.updateCanvas(canvas, sharpened_image);
+}
+
+
+export function highboost(canvas, k) {
+
+  const gaussian_matrix = conv_matrices.gaussianBlur;
+
+  const { R, G, B } = utils.splitImage(canvas);
+
+  const R_conv = utils.applyGenericConvolution(gaussian_matrix, R);
+  const G_conv = utils.applyGenericConvolution(gaussian_matrix, G);
+  const B_conv = utils.applyGenericConvolution(gaussian_matrix, B);
+
+  const blurred_image = utils.unifyImage(R_conv, G_conv, B_conv);
+
+  const image_normalized = utils.getNormalizedPixels(canvas);
+
+  const mask = utils.add(image_normalized, blurred_image, -1);
+
+  const sharpened_image = utils.add(image_normalized, mask, k);
+  utils.updateCanvas(canvas, sharpened_image);
 
 }

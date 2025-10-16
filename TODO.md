@@ -29,8 +29,8 @@
 - [x] Filtragem pela mediana com tamanho de filtro variável
 
 ## 7. Realce e detecção de bordas
-- [ ] Implementar aguçamento (nitidez) por filtro Laplaciano
-- [ ] Implementar aguçamento por filtro High-Boost
+- [x] Implementar aguçamento (nitidez) por filtro Laplaciano
+- [x] Implementar aguçamento por filtro High-Boost
 - [x] Implementar filtros de Sobel (gradiente em X)
 - [x] Implementar filtros de Sobel (gradiente em Y)
 - [ ] Implementar detecção não linear de bordas pelo gradiente (magnitude)

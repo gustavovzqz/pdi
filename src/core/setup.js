@@ -523,7 +523,6 @@ export function setupSharp(btnSharpId, btnHighId, btnLaplaceId, modalId, canvas)
 
   btnLaplace.addEventListener('click', () => {
     const k = parseFloat(inputK.value) || 1;
-    console.log(k);
     imageProcessor.laplacianSharp(canvas, k);
     modal.style.display = 'none';
   });
