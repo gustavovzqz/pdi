@@ -409,7 +409,6 @@ function showPresetMatrix(selectId, displayId) {
     matrix.map(row => row.join('\t')).join('\n');
 }
 
-
 export function setupManualConvolution(
   triggerBtnId,
   modalId,
@@ -439,7 +438,7 @@ export function setupManualConvolution(
     }
 
     if (size % 2 === 0) {
-      alert('Digite um número ímpar para o tamanho da matriz (ex: 3, 5, 7...)');
+      alert('digite um número ímpar para o tamanho da matriz (ex: 3, 5, 7...)');
       return;
     }
     generateMatrixInputs(matrixContainer, size);
@@ -453,7 +452,6 @@ export function setupManualConvolution(
     }
 
     imageProcessor.applyConvolution(matrix, canvas);
-    modal.style.display = 'none';
   });
 
   window.addEventListener('click', (e) => {
@@ -503,3 +501,72 @@ function readMatrixFromInputs(container) {
   }
   return matrix;
 }
+
+
+
+export function setupFilters(
+  btnFilterId,
+  modalId,
+  btnMediaId,
+  btnMediaPondId,
+  btnMedianaId,
+  canvas
+) {
+  const btnFilter = document.getElementById(btnFilterId);
+  const btnMedia = document.getElementById(btnMediaId);
+  const btnMediaPond = document.getElementById(btnMediaPondId);
+  const btnMediana = document.getElementById(btnMedianaId);
+  const modal = document.getElementById(modalId);
+
+  const matrixInput = document.getElementById('matrix-size');
+
+  btnFilter.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  function getMatrixSize() {
+    const size = parseInt(matrixInput.value);
+    if (isNaN(size) || size <= 0) {
+      alert("Insira um tamanho válido para a matriz.");
+      return null;
+    }
+
+    if (size % 2 === 0) {
+      alert('digite um número ímpar para o tamanho da matriz (ex: 3, 5, 7...)');
+      return;
+    }
+
+    return size;
+  }
+
+  btnMedia.addEventListener('click', () => {
+    const size = getMatrixSize();
+    if (size === null) return;
+
+    imageProcessor.applyMeanFilter(size, canvas);
+  });
+
+  btnMediaPond.addEventListener('click', () => {
+    const size = getMatrixSize();
+    if (size === null) return;
+
+    imageProcessor.applyWeightedMeanFilter(size, canvas);
+  });
+
+  btnMediana.addEventListener('click', () => {
+    const size = getMatrixSize();
+    if (size === null) return;
+
+    imageProcessor.applyMedianFilter(size, canvas);
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}
+
+
+

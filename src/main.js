@@ -9,7 +9,8 @@ import {
   setupInvertButton,
   setupPiecewiseGraph,
   setupSteganography,
-  setupManualConvolution
+  setupManualConvolution,
+  setupFilters
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -64,5 +65,13 @@ setupManualConvolution(
   'btn-generate-matrix',
   'matrix-container',
   'apply-manual-conv-btn',
+  canvas
+);
+
+setupFilters('btn-filters',
+  'filters-manual-modal',
+  'btn-media',
+  'btn-media-ponderada',
+  'btn-mediana',
   canvas
 );

@@ -136,4 +136,51 @@ export function applyGenericConvolution(convMatrix, imageMatrix) {
 }
 
 
+export function applyGenericMedianFilter(size, imageMatrix) {
+  const IMAGE_X_SIZE = imageMatrix.length;
+  const IMAGE_Y_SIZE = imageMatrix[0].length;
+
+  const half = Math.floor(size / 2);
+
+  const outputMatrix = Array.from({ length: IMAGE_X_SIZE }, () =>
+    Array(IMAGE_Y_SIZE).fill(0)
+  );
+
+  for (let i = 0; i < IMAGE_X_SIZE; i++) {
+    for (let j = 0; j < IMAGE_Y_SIZE; j++) {
+      let values = [];
+
+      for (let i_conv = 0; i_conv < size; i_conv++) {
+        for (let j_conv = 0; j_conv < size; j_conv++) {
+          const x = i - half + i_conv;
+          const y = j - half + j_conv;
+
+          if (x >= 0 && x < IMAGE_X_SIZE && y >= 0 && y < IMAGE_Y_SIZE) {
+            values.push(imageMatrix[x][y]);
+          } else {
+            // acho que nao faz sentido aqui considerar a borda preta.
+            // so ignora
+          }
+        }
+      }
+
+      values.sort((a, b) => a - b);
+
+      let median;
+      const mid = Math.floor(values.length / 2);
+
+      if (values.length % 2 === 0) {
+        median = (values[mid - 1] + values[mid]) / 2;
+      } else {
+        median = values[mid];
+
+      }
+
+      outputMatrix[i][j] = median;
+    }
+
+  }
+  return outputMatrix;
+}
+
 

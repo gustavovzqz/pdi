@@ -17,16 +17,16 @@
 
 ## 5. Filtragem por convolução
 - [x] Implementar função genérica para filtro por convolução
-- [ ] Permitir que usuário escolha tamanho do filtro (3x3, 5x5, 7x7, 9x9, etc)
+- [x] Permitir que usuário escolha tamanho do filtro (3x3, 5x5, 7x7, 9x9, etc)
 - [x] Aplicar bordas pretas para manter tamanho original da imagem após convolução
 - [x] Normalizar valores resultantes da convolução para faixa 0-255 para exibição
 
 ## 6. Filtros específicos
-- [ ] Filtro de suavização da média simples
-- [ ] Filtro de suavização da média ponderada
+- [x] Filtro de suavização da média simples
+- [x] Filtro de suavização da média ponderada
 - [x] Pré-definir filtro Gaussiano 3x3
 - [x] Pré-definir filtro Laplaciano 3x3
-- [ ] Filtragem pela mediana com tamanho de filtro variável
+- [x] Filtragem pela mediana com tamanho de filtro variável
 
 ## 7. Realce e detecção de bordas
 - [ ] Implementar aguçamento (nitidez) por filtro Laplaciano

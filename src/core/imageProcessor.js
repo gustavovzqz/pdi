@@ -230,8 +230,59 @@ export function applyConvolution(convMatrix, canvas) {
   const unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
 
   utils.updateCanvas(canvas, unifiedImage)
+}
 
 
 
+export function applyMeanFilter(size, canvas) {
+  const value = 1 / (size * size);
+  const conv_mean = Array.from({ length: size }, () => Array(size).fill(value));
+  applyConvolution(conv_mean, canvas);
+}
+
+function createWeightedMeanKernel(n) {
+  const kernel = [];
+  const center = Math.floor(n / 2);
+  let sum = 0;
+
+  for (let i = 0; i < n; i++) {
+    kernel[i] = [];
+    for (let j = 0; j < n; j++) {
+      // distancia euclidiana
+      const dist = Math.sqrt((i - center) ** 2 + (j - center) ** 2);
+      const weight = 1 / (dist + 1); // +1 
+      kernel[i][j] = weight;
+      sum += weight;
+    }
+  }
+
+  // normalize
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      kernel[i][j] /= sum;
+    }
+  }
+
+  return kernel;
+}
+
+export function applyWeightedMeanFilter(size, canvas) {
+
+  const kernel = createWeightedMeanKernel(size);
+
+  applyConvolution(kernel, canvas);
+}
+
+export function applyMedianFilter(size, canvas) {
+
+  const { R, G, B } = utils.splitImage(canvas);
+
+  const R_filtered = utils.applyGenericMedianFilter(size, R);
+  const G_filtered = utils.applyGenericMedianFilter(size, G);
+  const B_filtered = utils.applyGenericMedianFilter(size, B);
+
+  const unifiedImage = utils.unifyImage(R_filtered, G_filtered, B_filtered);
+
+  utils.updateCanvas(canvas, unifiedImage)
 
 }
