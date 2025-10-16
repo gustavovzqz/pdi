@@ -503,6 +503,38 @@ function readMatrixFromInputs(container) {
 }
 
 
+export function setupSharp(btnSharpId, btnHighId, btnLaplaceId, modalId, canvas) {
+  const btnSharp = document.getElementById(btnSharpId);
+  const btnHigh = document.getElementById(btnHighId);
+  const btnLaplace = document.getElementById(btnLaplaceId);
+  const modal = document.getElementById(modalId);
+
+  const inputK = modal.querySelector('#input-k');
+
+  btnSharp.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  btnHigh.addEventListener('click', () => {
+    const k = parseFloat(inputK.value) || 1;
+    imageProcessor.highboost(canvas, k);
+    modal.style.display = 'none';
+  });
+
+  btnLaplace.addEventListener('click', () => {
+    const k = parseFloat(inputK.value) || 1;
+    console.log(k);
+    imageProcessor.laplacianSharp(canvas, k);
+    modal.style.display = 'none';
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+}
+
 
 export function setupFilters(
   btnFilterId,

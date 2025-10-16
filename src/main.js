@@ -10,7 +10,8 @@ import {
   setupPiecewiseGraph,
   setupSteganography,
   setupManualConvolution,
-  setupFilters
+  setupFilters,
+  setupSharp
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -75,3 +76,9 @@ setupFilters('btn-filters',
   'btn-mediana',
   canvas
 );
+
+setupSharp('btn-sharp',
+  'btn-high-boost',
+  'btn-laplacian-sharp',
+  'sharp-modal',
+  canvas);

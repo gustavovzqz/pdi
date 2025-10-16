@@ -35,6 +35,7 @@
     <button id="btn-conv-manual" class="btn-conv">Convolução Manual</button>
     </div>
     <button id="btn-filters" class="btn-filters">Filtros</button>
+    <button id="btn-sharp" class="btn-sharp">Aguçamento</button>
   </header>
 
   <main>
@@ -90,6 +91,18 @@
     <button id="apply-conv-btn" class="btn-apply-conv">Aplicar Convolução</button>
   </div>
 </div>
+
+<div id="sharp-modal" class="modal">
+  <div class="modal-content">
+    <h2>Aguçamento</h2>
+    <label for="input-k">Fator k:</label>
+    <input type="number" id="input-k" value="1"/>
+    <button id="btn-laplacian-sharp">Aguçamento por Filtro Laplaciano</button>
+    <button id="btn-high-boost">High-Boost</button>
+  </div>
+</div>
+
+
 
 
 <div id="conv-manual-modal" class="modal">

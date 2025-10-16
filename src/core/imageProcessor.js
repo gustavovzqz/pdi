@@ -1,4 +1,5 @@
 import * as utils from './utils.js';
+import * as conv_matrices from './conv_matrices.js';
 
 const RGBA_SHIFT = 4;
 
@@ -284,5 +285,23 @@ export function applyMedianFilter(size, canvas) {
   const unifiedImage = utils.unifyImage(R_filtered, G_filtered, B_filtered);
 
   utils.updateCanvas(canvas, unifiedImage)
+
+}
+
+
+export function laplacianSharp(canvas, k) {
+
+  const laplace_matrix = conv_matrices.laplacian;
+
+  const { R, G, B } = utils.splitImage(canvas);
+
+  const R_conv = utils.applyGenericConvolution(laplace_matrix, R);
+  const G_conv = utils.applyGenericConvolution(laplace_matrix, G);
+  const B_conv = utils.applyGenericConvolution(laplace_matrix, B);
+
+  const unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
+
+  utils.add(canvas, unifiedImage, k);
+
 
 }
