@@ -11,7 +11,8 @@ import {
   setupSteganography,
   setupManualConvolution,
   setupFilters,
-  setupSharp
+  setupSharp,
+  setupEdgeDetection
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -82,3 +83,5 @@ setupSharp('btn-sharp',
   'btn-laplacian-sharp',
   'sharp-modal',
   canvas);
+
+setupEdgeDetection('btn-edge', canvas);

@@ -1,8 +1,8 @@
 # ToDo List - Trabalho 1: Processamento de Imagens
 
 ## 1. Operações de transformação de intensidade
-- [x] Implementar Negativo da imagem
-- [x] Implementar Correção de gama
+- [x] Implementar Negativo da imagem 
+- [x] Implementar Correção de gama 
 - [x] Implementar transformação linear definida por partes
 
 ## 2. Esteganografia
@@ -33,11 +33,25 @@
 - [x] Implementar aguçamento por filtro High-Boost
 - [x] Implementar filtros de Sobel (gradiente em X)
 - [x] Implementar filtros de Sobel (gradiente em Y)
-- [ ] Implementar detecção não linear de bordas pelo gradiente (magnitude)
+- [x] Implementar detecção não linear de bordas pelo gradiente (magnitude)
 
 ## 8. Fourier
 
 - [ ] Cálculo da Transformada Discreta de Fourier, exibição do espectro (deslocado) com possibilidade de edição por parte do usuário (ferramenta de desenho que permita riscar com pontos pretos e brancos a imagem do espectro ou pontos em escala de cinza - “pincel suave”) e cálculo da transformada inversa (dadas as modificações editadas pelo usuário no espectro), obtendo a imagem filtrada.
+
+## 9. Imagens Coloridas
+
+- [x] Escala de Cinza Pondereda
+- [ ] Escala de Cinza Simples
+- [x] Negativo
+- [ ] Chroma-Key 
+- [ ] Histograma R G B e I 
+- [ ] Equalização de Histograma (HSI)
+- [x] Suavização e Aguçamento 
+- [ ] Ajuste de Matiz
+- [ ] Saturação e Brilho
+- [ ] Ajuste de Canal
+- [ ] Sépia
 
 ---
 

@@ -371,8 +371,10 @@ export function setupConvolution({
   btnApply.addEventListener('click', () => {
     const matrix = getSelectedPresetMatrix(select.id);
 
+    const adjust = (select.id !== 'gaussiana');
+
     if (matrix.length > 0) {
-      imageProcessor.applyConvolution(matrix, canvas);
+      imageProcessor.applyConvolution(matrix, canvas, adjust);
       modal.style.display = 'none';
     } else {
       alert('Selecione uma matriz válida.');
@@ -600,4 +602,15 @@ export function setupFilters(
 }
 
 
+// edge
+
+
+export function setupEdgeDetection(btnId, canvas) {
+  const btnEdge = document.getElementById(btnId);
+
+  btnEdge.addEventListener('click', () => {
+
+    imageProcessor.magnitudeEdgeDetection(canvas);
+  });
+}
 

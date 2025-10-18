@@ -197,3 +197,30 @@ export function add(data, image, k) {
 
   return result;
 }
+
+
+export function adjustImage(data) {
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (let i = 0; i < data.length; i += 4) {
+    for (let c = 0; c < 3; c++) {
+      if (data[i + c] < min) min = data[i + c];
+      if (data[i + c] > max) max = data[i + c];
+    }
+  }
+
+  const range = max - min || 1;
+
+  const adjusted = new Float32Array(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    for (let c = 0; c < 3; c++) {
+      adjusted[i + c] = (data[i + c] - min) / range;
+    }
+    adjusted[i + 3] = data[i + 3];
+  }
+
+  return adjusted;
+}
+

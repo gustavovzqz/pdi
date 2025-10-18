@@ -220,7 +220,7 @@ export function binarizeImage(canvas) {
   utils.updateCanvas(canvas, binary);
 }
 
-export function applyConvolution(convMatrix, canvas) {
+export function applyConvolution(convMatrix, canvas, adjust = false) {
 
   const { R, G, B } = utils.splitImage(canvas);
 
@@ -228,7 +228,13 @@ export function applyConvolution(convMatrix, canvas) {
   const G_conv = utils.applyGenericConvolution(convMatrix, G);
   const B_conv = utils.applyGenericConvolution(convMatrix, B);
 
-  const unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
+  let unifiedImage = utils.unifyImage(R_conv, G_conv, B_conv);
+
+  if (adjust) {
+
+    unifiedImage = utils.adjustImage(unifiedImage);
+
+  }
 
   utils.updateCanvas(canvas, unifiedImage)
 }
@@ -327,4 +333,41 @@ export function highboost(canvas, k) {
   const sharpened_image = utils.add(image_normalized, mask, k);
   utils.updateCanvas(canvas, sharpened_image);
 
+}
+
+
+export function magnitudeEdgeDetection(canvas) {
+  const { R, G, B } = utils.splitImage(canvas);
+
+  // Aplica convolução com Sobel X e Y em cada canal
+  const Rx = utils.applyGenericConvolution(conv_matrices.sobelX, R);
+  const Ry = utils.applyGenericConvolution(conv_matrices.sobelY, R);
+
+  const Gx = utils.applyGenericConvolution(conv_matrices.sobelX, G);
+  const Gy = utils.applyGenericConvolution(conv_matrices.sobelY, G);
+
+  const Bx = utils.applyGenericConvolution(conv_matrices.sobelX, B);
+  const By = utils.applyGenericConvolution(conv_matrices.sobelY, B);
+
+  const height = R.length;
+  const width = R[0].length;
+
+  const magnitudeR = [];
+  const magnitudeG = [];
+  const magnitudeB = [];
+
+  for (let y = 0; y < height; y++) {
+    magnitudeR[y] = [];
+    magnitudeG[y] = [];
+    magnitudeB[y] = [];
+    for (let x = 0; x < width; x++) {
+      magnitudeR[y][x] = Math.sqrt(Rx[y][x] ** 2 + Ry[y][x] ** 2);
+      magnitudeG[y][x] = Math.sqrt(Gx[y][x] ** 2 + Gy[y][x] ** 2);
+      magnitudeB[y][x] = Math.sqrt(Bx[y][x] ** 2 + By[y][x] ** 2);
+    }
+  }
+
+  const magnitudeImage = utils.unifyImage(magnitudeR, magnitudeG, magnitudeB);
+
+  utils.updateCanvas(canvas, magnitudeImage);
 }
