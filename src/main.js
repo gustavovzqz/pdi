@@ -15,8 +15,7 @@ import {
   setupEdgeDetection,
   setupRotation,
   setupScale,
-  setupFourier,
-  setupFourierInv
+  setupFourier
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
