@@ -12,7 +12,9 @@ import {
   setupManualConvolution,
   setupFilters,
   setupSharp,
-  setupEdgeDetection
+  setupEdgeDetection,
+  setupRotation,
+  setupScale
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -85,3 +87,6 @@ setupSharp('btn-sharp',
   canvas);
 
 setupEdgeDetection('btn-edge', canvas);
+
+setupRotation('btn-rot', 'rot-modal', 'confirm-rotation', canvas)
+setupScale('btn-scale', 'scale-modal', 'confirm-scale', canvas)

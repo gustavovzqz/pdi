@@ -244,6 +244,68 @@ function setupGraph(containerId) {
   return () => [p1, p2];
 }
 
+export function setupRotation(buttonId, modalId, rotButtonId, canvas) {
+
+  const btnRotation = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+  const btnApplyRotation = document.getElementById(rotButtonId);
+  const input = document.getElementById('rot-input');
+
+  btnRotation.addEventListener('click', () => {
+
+    modal.style.display = 'block';
+  })
+
+  btnApplyRotation.addEventListener('click', () => {
+    const rotationValue = parseFloat(input.value);
+
+    imageProcessor.rotImage(canvas, rotationValue);
+
+  });
+
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}
+
+export function setupScale(buttonId, modalId, scaleButtonId, canvas) {
+
+  const btnScale = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+
+  const btnApplyScale = document.getElementById(scaleButtonId);
+  const input_x = document.getElementById('scale-input-x');
+  const input_y = document.getElementById('scale-input-y');
+
+  btnScale.addEventListener('click', () => {
+
+    modal.style.display = 'block';
+  });
+
+  btnApplyScale.addEventListener('click', () => {
+    const scaleValueX = parseFloat(input_x.value);
+    const scaleValueY = parseFloat(input_y.value);
+
+
+    imageProcessor.scaleImage(canvas, scaleValueX, scaleValueY);
+
+  });
+
+
+
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}
+
 // Histogram Setup
 
 export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, canvas) {

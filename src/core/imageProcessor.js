@@ -371,3 +371,136 @@ export function magnitudeEdgeDetection(canvas) {
 
   utils.updateCanvas(canvas, magnitudeImage);
 }
+
+
+// CÓDIGOS ADAPTADOS (baseados no do yuri)
+export function scaleImage(canvas, sx, sy) {
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const src = imgData.data;
+
+  const largura = canvas.width;
+  const altura = canvas.height;
+
+  const novaLargura = Math.round(largura * sx);
+  const novaAltura = Math.round(altura * sy);
+
+  const newCanvas = document.createElement('canvas');
+  newCanvas.width = novaLargura;
+  newCanvas.height = novaAltura;
+  const newCtx = newCanvas.getContext('2d');
+  const newImgData = newCtx.createImageData(novaLargura, novaAltura);
+  const dst = newImgData.data;
+
+  function getPixel(x, y) {
+    if (x < 0 || y < 0 || x >= largura || y >= altura) return [0, 0, 0, 0];
+    const idx = (y * largura + x) * 4;
+    return [
+      src[idx],
+      src[idx + 1],
+      src[idx + 2],
+      src[idx + 3]
+    ];
+  }
+
+  for (let y = 0; y < novaAltura; y++) {
+    for (let x = 0; x < novaLargura; x++) {
+
+      const divx = x / sx;
+      const divy = y / sy;
+
+      const intx = Math.floor(divx);
+      const inty = Math.floor(divy);
+
+      const px = divx - intx;
+      const py = divy - inty;
+
+      const p1 = getPixel(intx, inty);
+      const p2 = getPixel(intx, inty + 1);
+      const p3 = getPixel(intx + 1, inty);
+      const p4 = getPixel(intx + 1, inty + 1);
+
+      const rgba = [0, 0, 0, 0];
+      for (let c = 0; c < 4; c++) {
+        const i1 = (1 - py) * p1[c] + py * p2[c];
+        const i2 = (1 - py) * p3[c] + py * p4[c];
+        rgba[c] = (1 - px) * i1 + px * i2;
+      }
+
+      const dstIdx = (y * novaLargura + x) * 4;
+      dst[dstIdx] = rgba[0];
+      dst[dstIdx + 1] = rgba[1];
+      dst[dstIdx + 2] = rgba[2];
+      dst[dstIdx + 3] = rgba[3];
+    }
+  }
+
+  canvas.width = novaLargura;
+  canvas.height = novaAltura;
+  ctx.putImageData(newImgData, 0, 0);
+}
+
+
+
+export function rotImage(canvas, anguloGraus) {
+  const ctx = canvas.getContext('2d');
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const src = imgData.data;
+
+  const largura = canvas.width;
+  const altura = canvas.height;
+
+  const a = (Math.PI * anguloGraus) / 180;
+  const sina = Math.sin(-a);
+  const cosa = Math.cos(-a);
+
+  const p1x = largura * Math.cos(a);
+  const p1y = largura * Math.sin(a);
+
+  const p2x = largura * Math.cos(a) - altura * Math.sin(a);
+  const p2y = largura * Math.sin(a) + altura * Math.cos(a);
+
+  const p3x = -altura * Math.sin(a);
+  const p3y = altura * Math.cos(a);
+
+  const vx = [0, p1x, p2x, p3x];
+  const vy = [0, p1y, p2y, p3y];
+
+  const largf = Math.round(Math.max(...vx) - Math.min(...vx));
+  const altf = Math.round(Math.max(...vy) - Math.min(...vy));
+
+  const dx = Math.min(...vx);
+  const dy = Math.min(...vy);
+
+  const newCanvas = document.createElement('canvas');
+  newCanvas.width = largf;
+  newCanvas.height = altf;
+  const newCtx = newCanvas.getContext('2d');
+  const newImgData = newCtx.createImageData(largf, altf);
+  const dst = newImgData.data;
+
+  function getPixel(x, y) {
+    if (x < 0 || y < 0 || x >= largura || y >= altura) return [0, 0, 0, 0];
+    const idx = (Math.floor(y) * largura + Math.floor(x)) * 4;
+    return [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
+  }
+
+  for (let y = 0; y < altf; y++) {
+    for (let x = 0; x < largf; x++) {
+      const xo = (x + dx) * cosa - (y + dy) * sina;
+      const yo = (x + dx) * sina + (y + dy) * cosa;
+
+      const color = getPixel(xo, yo);
+      const idx = (y * largf + x) * 4;
+
+      dst[idx] = color[0];
+      dst[idx + 1] = color[1];
+      dst[idx + 2] = color[2];
+      dst[idx + 3] = color[3];
+    }
+  }
+
+  canvas.width = largf;
+  canvas.height = altf;
+  ctx.putImageData(newImgData, 0, 0);
+}

@@ -37,11 +37,30 @@
     <button id="btn-filters" class="btn-filters">Filtros</button>
     <button id="btn-sharp" class="btn-sharp">Aguçamento</button>
     <button id="btn-edge" class="btn-edge">Detecção de Borda Não Linear</button>
+    <button id="btn-rot" class="btn-rot">Rotação</button>
+    <button id="btn-scale" class="btn-scale">Escala</button>
   </header>
 
   <main>
     <canvas id="canvas" width="800" height="600"></canvas>
   </main>
+
+  <div id="scale-modal" class="modal">
+    <div class="modal-content">
+      <h2>Insira o fator de escala:<h2>
+      <input type="number" id="scale-input-x" min="0" value="2" />
+      <input type="number" id="scale-input-y" min="0" value="2" />
+      <button id="confirm-scale">Escalar</button> 
+    </div>
+  </div>
+
+  <div id="rot-modal" class="modal">
+    <div class="modal-content">
+      <h2>Insira o ângulo de rotação em graus:</h2>
+      <input type="number" id="rot-input" min="0" value="90" />
+      <button id="confirm-rotation">Rotacionar</button> 
+    </div>
+  </div>
 
   <div id="graph-modal" class="modal">
     <div class="modal-content">
