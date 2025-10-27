@@ -114,6 +114,17 @@ export function setupGrayScale(canvas, btnGrayScaleId) {
 
 }
 
+// Setup SimpleGrayScale
+export function setupSimpleGrayScale(canvas, btnGrayScaleId) {
+
+  const btnGray = document.getElementById(btnGrayScaleId);
+
+  btnGray.addEventListener('click', () => {
+    imageProcessor.updateToSimpleGrayScale(canvas);
+  });
+
+}
+
 export function setupFourier(canvas, btnFourierId) {
 
   const btnFourier = document.getElementById(btnFourierId);

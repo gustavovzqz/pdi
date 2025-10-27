@@ -15,6 +15,7 @@ import {
   setupEdgeDetection,
   setupRotation,
   setupScale,
+  setupSimpleGrayScale,
   setupFourier
 } from './core/setup.js';
 
@@ -50,6 +51,7 @@ setupHistogramAnalysis(
 
 
 setupGrayScale(canvas, 'btn-gray')
+setupSimpleGrayScale(canvas, 'btn-gray-simple')
 setupBinarization('btn-limiar', canvas);
 
 

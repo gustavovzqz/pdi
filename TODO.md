@@ -42,12 +42,12 @@
 
 ## 8. Fourier
 
-- [ ] Cálculo da Transformada Discreta de Fourier, exibição do espectro (deslocado) com possibilidade de edição por parte do usuário (ferramenta de desenho que permita riscar com pontos pretos e brancos a imagem do espectro ou pontos em escala de cinza - “pincel suave”) e cálculo da transformada inversa (dadas as modificações editadas pelo usuário no espectro), obtendo a imagem filtrada.
+- [x] (Incompleto) Cálculo da Transformada Discreta de Fourier, exibição do espectro (deslocado) com possibilidade de edição por parte do usuário (ferramenta de desenho que permita riscar com pontos pretos e brancos a imagem do espectro ou pontos em escala de cinza - “pincel suave”) e cálculo da transformada inversa (dadas as modificações editadas pelo usuário no espectro), obtendo a imagem filtrada.
 
 ## 9. Imagens Coloridas
 
 - [x] Escala de Cinza Pondereda
-- [ ] Escala de Cinza Simples
+- [x] Escala de Cinza Simples
 - [x] Negativo
 - [ ] Chroma-Key 
 - [ ] Histograma R G B e I 
