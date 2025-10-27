@@ -1,5 +1,6 @@
 import * as utils from './utils.js';
 import * as conv_matrices from './conv_matrices.js';
+import { applyFourierLenta } from './utils_dft.js';
 
 const RGBA_SHIFT = 4;
 
@@ -372,8 +373,6 @@ export function magnitudeEdgeDetection(canvas) {
   utils.updateCanvas(canvas, magnitudeImage);
 }
 
-
-// CÓDIGOS ADAPTADOS (baseados no do yuri)
 export function scaleImage(canvas, sx, sy) {
   const ctx = canvas.getContext('2d');
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -440,8 +439,6 @@ export function scaleImage(canvas, sx, sy) {
   ctx.putImageData(newImgData, 0, 0);
 }
 
-
-
 export function rotImage(canvas, anguloGraus) {
   const ctx = canvas.getContext('2d');
   const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -454,12 +451,11 @@ export function rotImage(canvas, anguloGraus) {
   const sina = Math.sin(-a);
   const cosa = Math.cos(-a);
 
+  // Calcula os novos limites do canvas rotacionado
   const p1x = largura * Math.cos(a);
   const p1y = largura * Math.sin(a);
-
   const p2x = largura * Math.cos(a) - altura * Math.sin(a);
   const p2y = largura * Math.sin(a) + altura * Math.cos(a);
-
   const p3x = -altura * Math.sin(a);
   const p3y = altura * Math.cos(a);
 
@@ -472,6 +468,7 @@ export function rotImage(canvas, anguloGraus) {
   const dx = Math.min(...vx);
   const dy = Math.min(...vy);
 
+  // Novo canvas para resultado
   const newCanvas = document.createElement('canvas');
   newCanvas.width = largf;
   newCanvas.height = altf;
@@ -479,24 +476,54 @@ export function rotImage(canvas, anguloGraus) {
   const newImgData = newCtx.createImageData(largf, altf);
   const dst = newImgData.data;
 
-  function getPixel(x, y) {
-    if (x < 0 || y < 0 || x >= largura || y >= altura) return [0, 0, 0, 0];
-    const idx = (Math.floor(y) * largura + Math.floor(x)) * 4;
-    return [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
-  }
-
+  // Loop principal
   for (let y = 0; y < altf; y++) {
     for (let x = 0; x < largf; x++) {
       const xo = (x + dx) * cosa - (y + dy) * sina;
       const yo = (x + dx) * sina + (y + dy) * cosa;
 
-      const color = getPixel(xo, yo);
-      const idx = (y * largf + x) * 4;
+      // Coordenadas base e frações
+      const intx = Math.floor(xo);
+      const inty = Math.floor(yo);
+      const px = xo - intx;
+      const py = yo - inty;
 
-      dst[idx] = color[0];
-      dst[idx + 1] = color[1];
-      dst[idx + 2] = color[2];
-      dst[idx + 3] = color[3];
+      // Pega os 4 pixels vizinhos
+      let p1 = [0, 0, 0, 0],
+        p2 = [0, 0, 0, 0],
+        p3 = [0, 0, 0, 0],
+        p4 = [0, 0, 0, 0];
+
+      if (intx >= 0 && intx < largura && inty >= 0 && inty < altura) {
+        let idx = (inty * largura + intx) * 4;
+        p1 = [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
+      }
+      if (intx >= 0 && intx < largura && inty + 1 >= 0 && inty + 1 < altura) {
+        let idx = ((inty + 1) * largura + intx) * 4;
+        p2 = [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
+      }
+      if (intx + 1 >= 0 && intx + 1 < largura && inty >= 0 && inty < altura) {
+        let idx = (inty * largura + intx + 1) * 4;
+        p3 = [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
+      }
+      if (intx + 1 >= 0 && intx + 1 < largura && inty + 1 >= 0 && inty + 1 < altura) {
+        let idx = ((inty + 1) * largura + intx + 1) * 4;
+        p4 = [src[idx], src[idx + 1], src[idx + 2], src[idx + 3]];
+      }
+
+      // Interpolação bilinear
+      const rgba = [0, 0, 0, 0];
+      for (let c = 0; c < 4; c++) {
+        const i1 = (1 - py) * p1[c] + py * p2[c];
+        const i2 = (1 - py) * p3[c] + py * p4[c];
+        rgba[c] = (1 - px) * i1 + px * i2;
+      }
+
+      const dstIdx = (y * largf + x) * 4;
+      dst[dstIdx] = rgba[0];
+      dst[dstIdx + 1] = rgba[1];
+      dst[dstIdx + 2] = rgba[2];
+      dst[dstIdx + 3] = rgba[3];
     }
   }
 
@@ -504,3 +531,8 @@ export function rotImage(canvas, anguloGraus) {
   canvas.height = altf;
   ctx.putImageData(newImgData, 0, 0);
 }
+
+export function fourierTransform(canvas) {
+  applyFourierLenta(canvas);
+}
+

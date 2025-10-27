@@ -224,3 +224,23 @@ export function adjustImage(data) {
   return adjusted;
 }
 
+export function normalizeMatrix2D(matrix) {
+  const M = matrix.length;
+  const N = matrix[0].length;
+  let min = Infinity;
+  let max = -Infinity;
+
+  for (let i = 0; i < M; i++) {
+    for (let j = 0; j < N; j++) {
+      if (matrix[i][j] < min) min = matrix[i][j];
+      if (matrix[i][j] > max) max = matrix[i][j];
+    }
+  }
+
+  const range = max - min || 1; // evita divisão por zero
+  const normalized = Array.from({ length: M }, (_, i) =>
+    Array.from({ length: N }, (_, j) => (matrix[i][j] - min) / range)
+  );
+
+  return normalized;
+}

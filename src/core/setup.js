@@ -104,7 +104,6 @@ export function setupPiecewiseGraph(buttonId, modalId, closeId, confirmBtnId, ca
 }
 
 // Setup GrayScale
-
 export function setupGrayScale(canvas, btnGrayScaleId) {
 
   const btnGray = document.getElementById(btnGrayScaleId);
@@ -114,6 +113,17 @@ export function setupGrayScale(canvas, btnGrayScaleId) {
   });
 
 }
+
+export function setupFourier(canvas, btnFourierId) {
+
+  const btnFourier = document.getElementById(btnFourierId);
+
+  btnFourier.addEventListener('click', () => {
+    imageProcessor.fourierTransform(canvas);
+  });
+
+}
+
 
 // Setup Steganography
 
@@ -664,8 +674,6 @@ export function setupFilters(
 }
 
 
-// edge
-
 
 export function setupEdgeDetection(btnId, canvas) {
   const btnEdge = document.getElementById(btnId);
@@ -675,4 +683,6 @@ export function setupEdgeDetection(btnId, canvas) {
     imageProcessor.magnitudeEdgeDetection(canvas);
   });
 }
+
+
 

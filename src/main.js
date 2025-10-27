@@ -14,7 +14,9 @@ import {
   setupSharp,
   setupEdgeDetection,
   setupRotation,
-  setupScale
+  setupScale,
+  setupFourier,
+  setupFourierInv
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -88,5 +90,6 @@ setupSharp('btn-sharp',
 
 setupEdgeDetection('btn-edge', canvas);
 
-setupRotation('btn-rot', 'rot-modal', 'confirm-rotation', canvas)
-setupScale('btn-scale', 'scale-modal', 'confirm-scale', canvas)
+setupRotation('btn-rot', 'rot-modal', 'confirm-rotation', canvas);
+setupScale('btn-scale', 'scale-modal', 'confirm-scale', canvas);
+setupFourier(canvas, 'btn-fourier');
