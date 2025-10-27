@@ -54,8 +54,8 @@
 - [ ] Equalização de Histograma (HSI)
 - [x] Suavização e Aguçamento 
 - [ ] Ajuste de Matiz
-- [ ] Saturação e Brilho
-- [ ] Ajuste de Canal
+- [x] Saturação e Brilho
+- [x] Ajuste de Canal
 - [ ] Sépia
 
 ---

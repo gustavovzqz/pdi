@@ -244,3 +244,141 @@ export function normalizeMatrix2D(matrix) {
 
   return normalized;
 }
+
+export function rgbToHsiImage(data) {
+  const output = new Float32Array(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const sum = r + g + b;
+
+    // Intensidade
+    const I = sum / 3;
+
+    // Saturação
+    const minRGB = Math.min(r, g, b);
+    const S = sum === 0 ? 0 : 1 - 3 * minRGB / sum;
+
+    // Matiz
+    let H = 0;
+    if (S !== 0) {
+      const numerator = 0.5 * ((r - g) + (r - b));
+      const denominator = Math.sqrt((r - g) ** 2 + (r - b) * (g - b));
+      let theta = Math.acos(Math.min(Math.max(numerator / (denominator || 1e-10), -1), 1));
+      if (b > g) theta = 2 * Math.PI - theta;
+      H = theta / (2 * Math.PI);
+    }
+
+    output[i] = H;
+    output[i + 1] = S;
+    output[i + 2] = I;
+    output[i + 3] = data[i + 3]; // alfa permanece
+  }
+
+  return output;
+}
+
+export function hsiToRgbImage(data) {
+  const output = new Float32Array(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const H = data[i];
+    const S = data[i + 1];
+    const I = data[i + 2];
+    const h = H * 2 * Math.PI;
+
+    let r, g, b;
+
+    if (h < 2 * Math.PI / 3) {
+      b = I * (1 - S);
+      r = I * (1 + (S * Math.cos(h)) / Math.cos(Math.PI / 3 - h));
+      g = 3 * I - (r + b);
+    } else if (h < 4 * Math.PI / 3) {
+      const h2 = h - 2 * Math.PI / 3;
+      r = I * (1 - S);
+      g = I * (1 + (S * Math.cos(h2)) / Math.cos(Math.PI / 3 - h2));
+      b = 3 * I - (r + g);
+    } else {
+      const h3 = h - 4 * Math.PI / 3;
+      g = I * (1 - S);
+      b = I * (1 + (S * Math.cos(h3)) / Math.cos(Math.PI / 3 - h3));
+      r = 3 * I - (g + b);
+    }
+
+    output[i] = r;
+    output[i + 1] = g;
+    output[i + 2] = b;
+    output[i + 3] = data[i + 3]; // alfa permanece
+  }
+
+  return output;
+}
+
+export function rgbToHsvImage(data) {
+  const output = new Float32Array(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const delta = max - min;
+
+    // Valor
+    const V = max;
+
+    // Saturação
+    const S = max === 0 ? 0 : delta / max;
+
+    // Matiz
+    let H = 0;
+    if (delta !== 0) {
+      if (max === r) H = ((g - b) / delta) % 6;
+      else if (max === g) H = (b - r) / delta + 2;
+      else H = (r - g) / delta + 4;
+      H /= 6;
+      if (H < 0) H += 1;
+    }
+
+    output[i] = H;
+    output[i + 1] = S;
+    output[i + 2] = V;
+    output[i + 3] = data[i + 3];
+  }
+
+  return output;
+}
+
+export function hsvToRgbImage(data) {
+  const output = new Float32Array(data.length);
+
+  for (let i = 0; i < data.length; i += 4) {
+    const H = data[i];
+    const S = data[i + 1];
+    const V = data[i + 2];
+
+    const h = H * 6;
+    const c = V * S;
+    const x = c * (1 - Math.abs((h % 2) - 1));
+    const m = V - c;
+
+    let r1 = 0, g1 = 0, b1 = 0;
+    if (0 <= h && h < 1) [r1, g1, b1] = [c, x, 0];
+    else if (1 <= h && h < 2) [r1, g1, b1] = [x, c, 0];
+    else if (2 <= h && h < 3) [r1, g1, b1] = [0, c, x];
+    else if (3 <= h && h < 4) [r1, g1, b1] = [0, x, c];
+    else if (4 <= h && h < 5) [r1, g1, b1] = [x, 0, c];
+    else if (5 <= h && h < 6) [r1, g1, b1] = [c, 0, x];
+
+    output[i] = r1 + m;
+    output[i + 1] = g1 + m;
+    output[i + 2] = b1 + m;
+    output[i + 3] = data[i + 3];
+  }
+
+  return output;
+}

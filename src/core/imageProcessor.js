@@ -560,3 +560,70 @@ export function fourierTransform(canvas) {
   applyFourierLenta(canvas);
 }
 
+
+export function adjustChannel(canvas, r_fac, g_fac, b_fac) {
+  const ctx = canvas.getContext('2d');
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const pixels = imageData.data;
+  const newImg = new Float32Array(pixels.length);
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];     // Red
+    const g = pixels[i + 1]; // Green
+    const b = pixels[i + 2]; // Blue
+
+    newImg[i + 0] = (r * r_fac) / 255;
+    newImg[i + 1] = (g * g_fac) / 255;
+    newImg[i + 2] = (b * b_fac) / 255;
+    newImg[i + 3] = pixels[i + 3] / 255;
+  }
+
+  utils.updateCanvas(canvas, newImg)
+}
+
+
+export function adjustIlluminance(canvas, factor) {
+  const pixels = utils.getNormalizedPixels(canvas);
+  const newImgHsi = new Float32Array(pixels.length);
+
+  const hsi = utils.rgbToHsiImage(pixels);
+
+  for (let i = 0; i < hsi.length; i += 4) {
+    const H = hsi[i + 0];
+    const S = hsi[i + 1];
+    const I = hsi[i + 2];
+    const alpha = hsi[i + 3];
+
+    newImgHsi[i + 0] = H;
+    newImgHsi[i + 1] = S;
+    newImgHsi[i + 2] = I + factor;
+    newImgHsi[i + 3] = alpha;
+  }
+
+  const rgbImg = utils.hsiToRgbImage(newImgHsi);
+  utils.updateCanvas(canvas, rgbImg);
+}
+
+export function adjustSat(canvas, factor) {
+  const pixels = utils.getNormalizedPixels(canvas);
+  const newImgHsi = new Float32Array(pixels.length);
+
+  const hsi = utils.rgbToHsiImage(pixels);
+
+  for (let i = 0; i < hsi.length; i += 4) {
+    const H = hsi[i + 0];
+    const S = hsi[i + 1];
+    const I = hsi[i + 2];
+    const alpha = hsi[i + 3];
+
+    newImgHsi[i + 0] = H;
+    newImgHsi[i + 1] = S * factor;
+    newImgHsi[i + 2] = I;
+    newImgHsi[i + 3] = alpha;
+  }
+
+  const rgbImg = utils.hsiToRgbImage(newImgHsi);
+  utils.updateCanvas(canvas, rgbImg);
+}
+
+

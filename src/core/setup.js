@@ -50,6 +50,41 @@ export function setupInvertButton(buttonId, canvas) {
   });
 }
 
+export function setupAdjustChannel(canvas, btnId, modalId, applyId) {
+  const btn = document.getElementById(btnId);
+  const modal = document.getElementById(modalId);
+  const btnApply = document.getElementById(applyId);
+  const input_r = document.getElementById('channel-r');
+  const input_g = document.getElementById('channel-g');
+  const input_b = document.getElementById('channel-b');
+
+
+  btn.addEventListener('click', () => {
+
+    modal.style.display = 'block';
+  })
+
+
+  btnApply.addEventListener('click', () => {
+    const r_factor = parseFloat(input_r.value)
+    const g_factor = parseFloat(input_g.value)
+    const b_factor = parseFloat(input_b.value)
+
+    imageProcessor.adjustChannel(canvas, r_factor, g_factor, b_factor)
+
+  });
+
+
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+
+}
+
 // Gamma Correction
 export function setupGammaCorrection(buttonId, inputId, canvas) {
   const btnGamma = document.getElementById(buttonId);
@@ -182,9 +217,6 @@ export function setupSteganography(
 
 }
 
-
-
-
 // Setup Graphic
 let chartGraphInstance = null;
 function setupGraph(containerId) {
@@ -315,9 +347,6 @@ export function setupScale(buttonId, modalId, scaleButtonId, canvas) {
     imageProcessor.scaleImage(canvas, scaleValueX, scaleValueY);
 
   });
-
-
-
 
   window.addEventListener('click', e => {
     if (e.target === modal) {
@@ -696,4 +725,57 @@ export function setupEdgeDetection(btnId, canvas) {
 }
 
 
+export function setupIllum(buttonId, modalId, btnApplyId, canvas) {
 
+  const btn = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+
+  const btnApply = document.getElementById(btnApplyId);
+  const i_factor = document.getElementById('illum-value');
+
+  btn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  btnApply.addEventListener('click', () => {
+    const i_fac = parseFloat(i_factor.value);
+
+    imageProcessor.adjustIlluminance(canvas, i_fac);
+
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}
+
+
+export function setupSat(buttonId, modalId, btnApplyId, canvas) {
+
+  const btn = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+
+  const btnApply = document.getElementById(btnApplyId);
+  const i_factor = document.getElementById('sat-value');
+
+  btn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  btnApply.addEventListener('click', () => {
+    const i_fac = parseFloat(i_factor.value);
+
+    imageProcessor.adjustSat(canvas, i_fac);
+
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}

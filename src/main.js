@@ -16,7 +16,10 @@ import {
   setupRotation,
   setupScale,
   setupSimpleGrayScale,
-  setupFourier
+  setupFourier,
+  setupAdjustChannel,
+  setupIllum,
+  setupSat
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -92,5 +95,12 @@ setupSharp('btn-sharp',
 setupEdgeDetection('btn-edge', canvas);
 
 setupRotation('btn-rot', 'rot-modal', 'confirm-rotation', canvas);
+setupIllum('btn-ajuste-illum', 'illum-modal', 'confirm-illum', canvas);
+setupSat('btn-ajuste-sat', 'sat-modal', 'confirm-sat', canvas);
 setupScale('btn-scale', 'scale-modal', 'confirm-scale', canvas);
 setupFourier(canvas, 'btn-fourier');
+setupAdjustChannel(
+  canvas,
+  'btn-ajuste-canal',
+  'channel-modal',
+  'apply-channel') 

@@ -41,20 +41,53 @@
     <button id="btn-rot" class="btn-rot">Rotação</button>
     <button id="btn-scale" class="btn-scale">Escala</button>
     <button id="btn-fourier" class="btn-fourier">Transformada de Fourier</button>
+    <button id="btn-ajuste-canal" class="btn-ajuste">Ajuste de Canal</button>
+    <button id="btn-ajuste-illum" class="btn-ajuste-illum">Ajuste de Luminância</button>
+    <button id="btn-ajuste-sat" class="btn-ajuste-sat">Ajuste de Saturação</button>
   </header>
 
-  <main>
-    <canvas id="canvas" width="800" height="600"></canvas>
-  </main>
+    <main>
+      <canvas id="canvas" width="800" height="600"></canvas>
+    </main>
+
+    <div id="channel-modal" class="modal">
+      <div class="modal-content">
+        <h2>Insira um fator multiplicativo para cada canal</h2>
+        <label>R:</label>
+        <input type="number" id="channel-r" min="0.01" step="0.01" value="1" /><br>
+        <label>G:</label>
+        <input type="number" id="channel-g" min="0.01" step="0.01" value="1" /><br>
+        <label>B:</label>
+        <input type="number" id="channel-b" min="0.01" step="0.01" value="1" /><br>
+        <button id="apply-channel">Aplicar</button>
+      </div>
+    </div>
 
   <div id="scale-modal" class="modal">
     <div class="modal-content">
-      <h2>Insira o fator de nescala:<h2>
+      <h2>Insira o fator de escala (x, y):<h2>
       <input type="number" id="scale-input-x" min="0" value="2" />
       <input type="number" id="scale-input-y" min="0" value="2" />
       <button id="confirm-scale">Escalar</button> 
     </div>
   </div>
+
+  <div id="illum-modal" class="modal">
+    <div class="modal-content">
+      <h2>Insira o fator de ajuste (aditivo):<h2>
+      <input type="number" id="illum-value" min="0" value="1" />
+      <button id="confirm-illum">Ajustar</button> 
+    </div>
+  </div>
+
+  <div id="sat-modal" class="modal">
+    <div class="modal-content">
+      <h2>Insira o fator de ajuste (multiplicativo):<h2>
+      <input type="number" id="sat-value" min="0" value="1" />
+      <button id="confirm-sat">Ajustar</button> 
+    </div>
+  </div>
+
 
   <div id="rot-modal" class="modal">
     <div class="modal-content">
