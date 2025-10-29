@@ -57,7 +57,7 @@ export function setupAdjustChannel(canvas, btnId, modalId, applyId) {
 
 
   btn.addEventListener('click', () => {
-
+    console.log("teste");
     modal.style.display = 'block';
   })
 
