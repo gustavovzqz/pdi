@@ -882,7 +882,7 @@ export function setupChroma(buttonId, modalId, btnApplyId, canvas) {
     const file = fileInput.files[0];
     if (!file) return;
 
-    const i_fac = parseInt(i_factor.value);
+    const i_fac = parseFloat(i_factor.value);
 
     const reader = new FileReader();
     reader.onload = (e) => {
