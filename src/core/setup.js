@@ -288,7 +288,6 @@ function setupGraph(containerId) {
     type: 'scatter',
     data,
     options,
-    plugins: [dragDataPlugin]
   });
 
   return () => [p1, p2];
