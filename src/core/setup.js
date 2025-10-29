@@ -779,3 +779,96 @@ export function setupSat(buttonId, modalId, btnApplyId, canvas) {
   });
 
 }
+
+export function setupMatiz(buttonId, modalId, btnApplyId, canvas) {
+
+  const btn = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+
+  const btnApply = document.getElementById(btnApplyId);
+  const i_factor = document.getElementById('matiz-value');
+
+  btn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  btnApply.addEventListener('click', () => {
+    const i_fac = parseInt(i_factor.value);
+
+    imageProcessor.adjustMatiz(canvas, i_fac);
+
+  });
+
+  window.addEventListener('click', e => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+
+}
+
+export function setupSepia(canvas, buttonId) {
+
+  const btn = document.getElementById(buttonId);
+
+
+  btn.addEventListener('click', () => {
+    imageProcessor.applySepia(canvas);
+  });
+
+
+}
+
+export function setupChroma(buttonId, modalId, btnApplyId, canvas) {
+  const btn = document.getElementById(buttonId);
+  const modal = document.getElementById(modalId);
+
+  const btnApply = document.getElementById(btnApplyId);
+  const i_factor = document.getElementById('chroma-value');
+
+  btn.addEventListener('click', () => {
+    modal.style.display = 'block';
+  });
+
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.style.display = 'none';
+  document.body.appendChild(fileInput);
+
+  btnApply.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const i_fac = parseInt(i_factor.value);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const tempCanvas = document.createElement('canvas');
+        const ctx = tempCanvas.getContext('2d');
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0);
+
+        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+
+        imageProcessor.chromaKey(canvas, i_fac * 255, imageData);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+}

@@ -626,4 +626,95 @@ export function adjustSat(canvas, factor) {
   utils.updateCanvas(canvas, rgbImg);
 }
 
+export function adjustMatiz(canvas, factor) {
+  const pixels = utils.getNormalizedPixels(canvas);
+  const newImgHsi = new Float32Array(pixels.length);
 
+  const hsi = utils.rgbToHsiImage(pixels);
+
+  for (let i = 0; i < hsi.length; i += 4) {
+    const H = hsi[i + 0];
+    const S = hsi[i + 1];
+    const I = hsi[i + 2];
+    const alpha = hsi[i + 3];
+
+    // Rotação
+    newImgHsi[i + 0] = ((H * 360 + factor) % 360) / 360;
+    newImgHsi[i + 1] = S;
+    newImgHsi[i + 2] = I;
+    newImgHsi[i + 3] = alpha;
+  }
+
+  const rgbImg = utils.hsiToRgbImage(newImgHsi);
+  utils.updateCanvas(canvas, rgbImg);
+}
+
+export function applySepia(canvas) {
+
+
+  const yChannel = utils.getYChannel(canvas);
+  const sepiaImg = new Float32Array(yChannel.length);
+
+  const sepiaR = 0.46;
+  const sepiaG = 0.34;
+  const sepiaB = 0.08;
+
+  for (let i = 0; i < yChannel.length; i += 4) {
+    const r = yChannel[i];     // Red
+    const g = yChannel[i + 1]; // Green
+    const b = yChannel[i + 2]; // Blue
+    const alpha = yChannel[i + 3] // alpha
+
+
+    sepiaImg[i + 0] = r * sepiaR;
+    sepiaImg[i + 1] = g * sepiaG;
+    sepiaImg[i + 2] = b * sepiaB;
+    sepiaImg[i + 3] = alpha;
+  }
+  utils.updateCanvas(canvas, sepiaImg);
+
+}
+
+
+export function chromaKey(canvas, i_fac, image_data) {
+  const ctx = canvas.getContext('2d');
+  const canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = canvasData.data;
+
+  const bgData = image_data.data;
+  const bgW = image_data.width;
+  const bgH = image_data.height;
+
+  const keyColor = [0, 255, 0]; // verde puro
+
+  const colorDist = (r1, g1, b1, r2, g2, b2) =>
+    Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const idx = (y * width + x) * 4;
+
+      const r = data[idx];
+      const g = data[idx + 1];
+      const b = data[idx + 2];
+
+      const dist = colorDist(r, g, b, ...keyColor);
+
+      if (dist < i_fac) {
+        const bgX = x % bgW;
+        const bgY = y % bgH;
+        const bgIdx = (bgY * bgW + bgX) * 4;
+
+        data[idx] = bgData[bgIdx];
+        data[idx + 1] = bgData[bgIdx + 1];
+        data[idx + 2] = bgData[bgIdx + 2];
+        data[idx + 3] = bgData[bgIdx + 3];
+      }
+    }
+  }
+
+  ctx.putImageData(canvasData, 0, 0);
+}

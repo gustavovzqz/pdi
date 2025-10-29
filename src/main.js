@@ -19,7 +19,10 @@ import {
   setupFourier,
   setupAdjustChannel,
   setupIllum,
-  setupSat
+  setupSat,
+  setupMatiz,
+  setupSepia,
+  setupChroma
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -97,10 +100,14 @@ setupEdgeDetection('btn-edge', canvas);
 setupRotation('btn-rot', 'rot-modal', 'confirm-rotation', canvas);
 setupIllum('btn-ajuste-illum', 'illum-modal', 'confirm-illum', canvas);
 setupSat('btn-ajuste-sat', 'sat-modal', 'confirm-sat', canvas);
+setupMatiz('btn-ajuste-matiz', 'matiz-modal', 'confirm-matiz', canvas);
 setupScale('btn-scale', 'scale-modal', 'confirm-scale', canvas);
 setupFourier(canvas, 'btn-fourier');
 setupAdjustChannel(
   canvas,
   'btn-ajuste-canal',
   'channel-modal',
-  'apply-channel') 
+  'apply-channel')
+setupSepia(canvas, 'btn-sepia');
+// o valor esta em chroma valuechroma-value
+setupChroma('btn-chroma', 'chroma-modal', 'confirm-chroma', canvas);

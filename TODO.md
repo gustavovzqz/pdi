@@ -49,14 +49,14 @@
 - [x] Escala de Cinza Pondereda
 - [x] Escala de Cinza Simples
 - [x] Negativo
-- [ ] Chroma-Key 
+- [x] Chroma-Key 
 - [ ] Histograma R G B e I 
 - [ ] Equalização de Histograma (HSI)
 - [x] Suavização e Aguçamento 
-- [ ] Ajuste de Matiz
+- [x] Ajuste de Matiz
 - [x] Saturação e Brilho
 - [x] Ajuste de Canal
-- [ ] Sépia
+- [x] Sépia
 
 ---
 
