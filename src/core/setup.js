@@ -358,18 +358,20 @@ export function setupScale(buttonId, modalId, scaleButtonId, canvas) {
 
 // Histogram Setup
 
-export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, canvas) {
+export function setupHistogramAnalysis
+  (buttonId, modalId, closeId, equalizeId, equalizeRgbId, canvas) {
 
   const btnHistogram = document.getElementById(buttonId);
   const modal = document.getElementById(modalId);
   const closeModal = document.getElementById(closeId);
   const btnEqualize = document.getElementById(equalizeId);
+  const btnEqualizeRGB = document.getElementById(equalizeRgbId);
 
 
   btnHistogram.addEventListener('click', () => {
 
     modal.style.display = 'block';
-    setupHistogramGraphics('hist-container', canvas);
+    setupHistogramRGB('hist-container', canvas);
   })
 
   closeModal.addEventListener('click', () => {
@@ -387,37 +389,79 @@ export function setupHistogramAnalysis(buttonId, modalId, closeId, equalizeId, c
     imageProcessor.equalizeHistogram(canvas);
     modal.style.display = 'none';
   })
+
+  btnEqualizeRGB.addEventListener('click', () => {
+    imageProcessor.equalizeHistogramRGB(canvas);
+    modal.style.display = 'none';
+  })
+
 }
 
-
-
-function setupHistogramGraphics(containerId, canvas) {
+function setupHistogramRGB(containerId, canvas) {
   const histCanvas = document.getElementById(containerId);
   const ctxHist = histCanvas.getContext('2d');
 
-  const yChannel = utils.getYChannel(canvas);
-  const histogram = new Array(256).fill(0);
+  const { R, G, B } = utils.splitImage(canvas);
+  const Y = utils.getYChannel(canvas);
 
-  for (let i = 0; i < yChannel.length; i += 4) {
-    const intensity = Math.min(255, Math.floor(yChannel[i] * 255));
-    histogram[intensity]++;
+  const width = canvas.width;
+  const height = canvas.height;
+
+  const histR = new Array(256).fill(0);
+  const histG = new Array(256).fill(0);
+  const histB = new Array(256).fill(0);
+  const histI = new Array(256).fill(0);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const r = Math.min(255, Math.floor(R[y][x] * 255));
+      const g = Math.min(255, Math.floor(G[y][x] * 255));
+      const b = Math.min(255, Math.floor(B[y][x] * 255));
+      const i = Math.min(255, Math.floor(Y[(y * width + x) * 4] * 255));
+
+      histR[r]++;
+      histG[g]++;
+      histB[b]++;
+      histI[i]++;
+    }
   }
 
-  if (window.histogramChart) {
-    window.histogramChart.destroy();
+  if (window.histogramRGBChart) {
+    window.histogramRGBChart.destroy();
   }
 
   const chartData = {
     labels: [...Array(256).keys()],
-    datasets: [{
-      label: 'Frequência de Intensidade',
-      data: histogram,
-      backgroundColor: 'rgba(0, 0, 255, 1)',
-      borderColor: 'rgba(0, 0, 150, 1)',
-      borderWidth: 1.5,
-      barPercentage: 1.0,
-      categoryPercentage: 1.0,
-    }]
+    datasets: [
+      {
+        label: 'R',
+        data: histR,
+        backgroundColor: 'rgba(255,0,0,0.7)',
+        borderColor: 'rgba(150,0,0,1)',
+        borderWidth: 1
+      },
+      {
+        label: 'G',
+        data: histG,
+        backgroundColor: 'rgba(0,255,0,0.7)',
+        borderColor: 'rgba(0,150,0,1)',
+        borderWidth: 1
+      },
+      {
+        label: 'B',
+        data: histB,
+        backgroundColor: 'rgba(0,0,255,0.7)',
+        borderColor: 'rgba(0,0,150,1)',
+        borderWidth: 1
+      },
+      {
+        label: 'I',
+        data: histI,
+        backgroundColor: 'rgba(128,128,128,0.7)',
+        borderColor: 'rgba(80,80,80,1)',
+        borderWidth: 1
+      }
+    ]
   };
 
   const chartOptions = {
@@ -433,12 +477,10 @@ function setupHistogramGraphics(containerId, canvas) {
         grid: { display: false }
       }
     },
-    plugins: {
-      legend: { display: false }
-    }
+    plugins: { legend: { display: true } }
   };
 
-  window.histogramChart = new Chart(ctxHist, {
+  window.histogramRGBChart = new Chart(ctxHist, {
     type: 'bar',
     data: chartData,
     options: chartOptions

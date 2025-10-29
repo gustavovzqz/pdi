@@ -22,7 +22,7 @@ import {
   setupSat,
   setupMatiz,
   setupSepia,
-  setupChroma
+  setupChroma,
 } from './core/setup.js';
 
 const canvas = document.getElementById('canvas');
@@ -52,9 +52,9 @@ setupHistogramAnalysis(
   'hist-modal',
   'close-hist-modal',
   'btn-equalize',
+  'btn-equalize-rgb',
   canvas
 )
-
 
 setupGrayScale(canvas, 'btn-gray')
 setupSimpleGrayScale(canvas, 'btn-gray-simple')

@@ -50,8 +50,8 @@
 - [x] Escala de Cinza Simples
 - [x] Negativo
 - [x] Chroma-Key 
-- [ ] Histograma R G B e I 
-- [ ] Equalização de Histograma (HSI)
+- [x] Histograma R G B e I 
+- [x] Equalização de Histograma (HSI)
 - [x] Suavização e Aguçamento 
 - [x] Ajuste de Matiz
 - [x] Saturação e Brilho

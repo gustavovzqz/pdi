@@ -718,3 +718,45 @@ export function chromaKey(canvas, i_fac, image_data) {
 
   ctx.putImageData(canvasData, 0, 0);
 }
+
+
+// é igual ao que a gente ja fez, so que agora mantem a componente das cores
+export function equalizeHistogramRGB(canvas) {
+
+
+  const hsiData = utils.rgbToHsiImage(utils.getNormalizedPixels(canvas));
+
+  const totalPixels = canvas.width * canvas.height;
+  const hist = new Array(256).fill(0);
+
+  // 1. Construir o histograma
+  for (let i = 0; i < hsiData.length; i += 4) {
+    const I = Math.floor(hsiData[i + 2] * 255);
+    hist[I]++;
+  }
+
+  // 2. Normalizar o histograma
+  const pdf = hist.map(v => v / totalPixels);
+
+  // 3. Calcular CDF
+  const cdf = new Array(256);
+  cdf[0] = pdf[0];
+  for (let i = 1; i < 256; i++) cdf[i] = cdf[i - 1] + pdf[i];
+
+  // 4. Atualizar Valores
+  const newHSI = new Float32Array(hsiData.length);
+  for (let i = 0; i < hsiData.length; i += 4) {
+    const H = hsiData[i];
+    const S = hsiData[i + 1];
+    const I = Math.floor(hsiData[i + 2] * 255);
+    const newI = cdf[I]; // valor entre 0–1
+
+    newHSI[i] = H;
+    newHSI[i + 1] = S;
+    newHSI[i + 2] = newI;
+    newHSI[i + 3] = hsiData[i + 3];
+  }
+
+  const equalizedRGB = utils.hsiToRgbImage(newHSI);
+  utils.updateCanvas(canvas, equalizedRGB);
+}

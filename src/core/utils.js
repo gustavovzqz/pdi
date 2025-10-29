@@ -382,3 +382,33 @@ export function hsvToRgbImage(data) {
 
   return output;
 }
+
+
+export function getHistogram(canvas) {
+  const { width, height } = canvas;
+  const { R, G, B } = splitImage(canvas);
+  const Y = getYChannel(canvas); // canal de intensidade
+
+  // Inicializa arrays de contagem
+  const histR = new Array(256).fill(0);
+  const histG = new Array(256).fill(0);
+  const histB = new Array(256).fill(0);
+  const histI = new Array(256).fill(0);
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const r = Math.floor(R[y][x] * 255);
+      const g = Math.floor(G[y][x] * 255);
+      const b = Math.floor(B[y][x] * 255);
+
+      const i = Math.floor(Y[(y * width + x) * 4] * 255); // pega R do Y normalizado
+
+      histR[r]++;
+      histG[g]++;
+      histB[b]++;
+      histI[i]++;
+    }
+  }
+
+  return { histR, histG, histB, histI };
+}
