@@ -1,5 +1,3 @@
-import dragDataPlugin from 'chartjs-plugin-dragdata';
-
 import * as imageProcessor from './imageProcessor.js';
 import * as utils from './utils.js';
 import * as convMatrices from './conv_matrices.js'
