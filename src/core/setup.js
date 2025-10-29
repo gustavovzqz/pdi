@@ -1,4 +1,3 @@
-import Chart from 'chart.js/auto';
 import dragDataPlugin from 'chartjs-plugin-dragdata';
 
 import * as imageProcessor from './imageProcessor.js';
